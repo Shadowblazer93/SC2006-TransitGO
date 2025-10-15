@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchUserData } from '../services/api';
+import { getUsers } from '../services/api';
 
 const UserComponent = () => {
     const [user, setUser] = useState(null);
@@ -9,7 +9,7 @@ const UserComponent = () => {
     useEffect(() => {
         const getUserData = async () => {
             try {
-                const data = await fetchUserData();
+                const data = await getUsers();
                 setUser(data);
             } catch (err) {
                 setError(err.message);
