@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse
 from app.services.datamall import *
+from app.services.dbconfig import *
 
 router = APIRouter()
 
@@ -20,11 +21,17 @@ async def create_user(user: UserCreate):
 
 @router.get("/users/{user_id}", response_model=UserResponse)
 async def read_user(user_id: int):
+    #basic checking to see if db can be accessed
+    resp = get_specific_user(user_id)
+    return resp.data
     # Logic to read a user by ID
     pass
 
 @router.get("/users/", response_model=list[UserResponse])
 async def read_users():
+    #basic checking to see if db can be accessed
+    resp=supabase.table("users").select("*").execute()
+    return resp.data
     # Logic to read all users
     pass
 
