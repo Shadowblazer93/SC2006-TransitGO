@@ -1,8 +1,17 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse
+from app.services.datamall import *
 
 router = APIRouter()
+
+@router.get("/busstops")
+def bus_stops():
+    try:
+        data = get_bus_stops()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate):

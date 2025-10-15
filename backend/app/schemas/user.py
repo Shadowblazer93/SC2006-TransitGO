@@ -12,3 +12,9 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+class UserResponse(UserBase):
+    id: int
+
+    class Config:
+        orm_mode = True
