@@ -23,6 +23,33 @@ my-mobile-app
 │   ├── src
 │   │   ├── App.js
 │   │   ├── index.js
+│   │   ├── pages
+│   │   │    ├──Login.js
+│   │   │    ├──NewAccount.js
+│   │   │    ├──ChangePassword.js
+│   │   │    ├──ResetPassword.js
+│   │   │    ├──Admin Pages
+│   │   │    │    ├──AdminMainPage.js
+│   │   │    │    ├──AdminAnnoucement.js
+│   │   │    │    ├──AdminUserFeedback.js
+│   │   │    │    ├──AdminUserAccounts.js
+│   │   │    │    ├──AdminSystemMetrics.js
+│   │   │    │    ├──AdminIssueHeatmaps.js
+│   │   │    │    ├──AdminProfile.js
+│   │   │    ├──User Pages
+│   │   │    │    ├──UserMainPage.js
+│   │   │    │    ├──InteractiveMap.js
+│   │   │    │    ├──FareEstimation.js
+│   │   │    │    ├──TravelTime.js
+│   │   │    │    ├──SavedList.js
+│   │   │    │    ├──TripHistory.js
+│   │   │    │    ├──PlatformCrowsdedness.js
+│   │   │    │    ├──ServiceAvailability.js
+│   │   │    │    ├──UserFeedback.js
+│   │   │    │    ├──UserProfile.js
+│   │   │    │    ├──Favourites.js
+│   │   │    │    ├──DownloadedArea.js
+│   │   │    │    ├──Accessibility.js
 │   │   ├── components
 │   │   │   └── UserComponent.js
 │   │   └── services
