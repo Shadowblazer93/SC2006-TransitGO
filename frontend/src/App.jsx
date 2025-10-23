@@ -1,23 +1,24 @@
-import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/Home.jsx'
-import About from './pages/About.jsx'
-import './App.css'
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import ResetPassword from "./pages/ResetPassword";
+import CreateAccount from "./pages/CreateAccount";
+import UserComponent from "./components/UserComponent";
 
 function App() {
   return (
-    <div className="App">
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/about">About</Link>
-      </nav>
+    <Routes>
+      {/* Auth Pages */}
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/create-account" element={<CreateAccount />} />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </div>
-  )
+      {/* Main App Pages */}
+      <Route path="/users" element={<UserComponent />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
 
