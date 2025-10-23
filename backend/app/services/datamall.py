@@ -22,8 +22,8 @@ def get_bus_stops():
         response.raise_for_status()
 
         # Debug info: status code and partial response
-        print("✅ Status Code:", response.status_code)
-        print("📦 Response snippet:", response.text[:200], "...")
+        print("Status Code:", response.status_code)
+        print("Response snippet:", response.text[:200], "...")
 
         data = response.json()
         bus_stops = data.get("value", [])
