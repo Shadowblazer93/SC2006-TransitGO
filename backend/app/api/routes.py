@@ -15,7 +15,7 @@ def bus_stops():
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.get("/busarrivals/{busStopCode}")
-def bus_arrivals(busStopCode:int):
+def bus_arrivals(busStopCode:str):
     try:
         data = get_bus_arrivals(busStopCode)
         return data
