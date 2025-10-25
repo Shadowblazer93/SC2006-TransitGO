@@ -32,4 +32,115 @@ export const getBusStops = async () => {
     }
 }
 
-// Add more API functions as needed for your application
+export const getBusArrivals = async (busStopCode) => {
+    try {
+        const encoded = encodeURIComponent(busStopCode);
+        const response = await axios.get(`${API_URL}/busarrivals/${encoded}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const getBusServices = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/busservices`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const getBusRoutes = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/busroutes`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const getStationCrowdDensityRealtime = async (trainLine) => {
+    try {
+        const encoded = encodeURIComponent(trainLine);
+        const response = await axios.get(`${API_URL}/stationcrowddensityrealtime/${encoded}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const getStationCrowdDensityForecast = async (trainLine) => {
+    try {
+        const encoded = encodeURIComponent(trainLine);
+        const response = await axios.get(`${API_URL}/stationcrowddensityforecast/${encoded}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const taxiAvailability = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/taxiavailability`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const taxiStands = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/taxistands`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const trainServiceAlerts = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/trainservicealerts`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const estimatedTravelTimes = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/estimatedtraveltimes`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const trafficImages = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/trafficimages`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export const trafficIncidents = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/trafficincidents`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}

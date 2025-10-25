@@ -13,6 +13,94 @@ def bus_stops():
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/busarrivals/{busStopCode}")
+def bus_arrivals(busStopCode:int):
+    try:
+        data = get_bus_arrivals(busStopCode)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/busservices")
+def bus_services():
+    try:
+        data = get_bus_services()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/busroutes")
+def bus_routes():
+    try:
+        data = get_bus_routes()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/stationcrowddensityrealtime/{train_line}")
+def station_crowddensityrealtime(train_line:str):
+    try:
+        data = get_station_crowd_density_realtime(train_line)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/stationcrowddensityforecast/{train_line}")
+def station_crowddensityforecast(train_line:str):
+    try:
+        data = get_station_crowd_density_forecast(train_line)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/taxiavailability")
+def taxi_availability():
+    try:
+        data = get_taxi_availability()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/taxistands")
+def taxi_stands():
+    try:
+        data = get_taxi_stands()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/trainservicealerts")
+def train_service_alerts():
+    try:
+        data = get_train_service_alerts()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/estimatedtraveltimes")
+def estimatedtraveltimes():
+    try:
+        data = get_estimated_travel_times()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/trafficimages")
+def traffic_images():
+    try:
+        data = get_traffic_images()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/trafficincidents")
+def traffic_incidents():
+    try:
+        data = get_traffic_incidents()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate):
