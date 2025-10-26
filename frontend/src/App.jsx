@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import CreateAccount from "./pages/CreateAccount";
+import StationDensityRealTime from "./pages/StationDensityRealTime";
 import UserComponent from "./components/UserComponent";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
       {/* Main App Pages */}
       <Route path="/users" element={<UserComponent />} />
+      <Route path="/stationdensityrealtime" element={<StationDensityRealTime />} />
     </Routes>
   );
 }
