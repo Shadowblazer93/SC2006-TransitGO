@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { getStationCrowdDensityRealtime } from '../services/api'
+import { getStationCrowdDensityForecast } from '../services/api'
 
 const LINES = ['CCL','CEL','CGL','DTL','EWL','NEL','NSL','BPL','SLRT','PLRT','TEL']
 const LineDesc = ['Circle Line','Circle Line Extension : Marina Bay','Changi Extension','Downtown Line','East West Line','North East Line','North South Line','Bukit Panjang LRT','Sengkang LRT',' Punggol LRT','Thomson-East Coast Line']
 
-export default function StationDensityRealTime() {
+export default function StationDensityForecast() {
   const [linesData, setLinesData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -17,11 +17,12 @@ export default function StationDensityRealTime() {
       setError(null)
       try {
         const promises = LINES.map((line) =>
-          getStationCrowdDensityRealtime(line)
+          getStationCrowdDensityForecast(line)
             .then((res) => ({ line, ok: true, payload: res }))
             .catch((err) => ({ line, ok: false, error: err }))
         )
         const results = await Promise.all(promises)
+        console.log(results)
 
         const normalized = results.map((r) => {
           if (!r.ok) return { line: r.line, error: r.error?.message || String(r.error), stations: [], count: 0 }
@@ -102,7 +103,7 @@ export default function StationDensityRealTime() {
     }}>
       {/* sticky header */}
       <div style={{ position: 'sticky', top: 0, zIndex: 20, marginBottom: 20, background:'#222', padding: '12px 10px' }}>
-        <h1 style={{ fontSize: 20, marginBottom: 8, color: '#fff' }}>Real-time Station Density</h1>
+        <h1 style={{ fontSize: 20, marginBottom: 8, color: '#fff' }}>Forecasted Station Density</h1>
         <p style={{ marginTop: 0, marginBottom: 12, color: '#aaa' }}>Tap a line to view its stations.</p>
 
       {/* search bar */}
@@ -130,8 +131,8 @@ export default function StationDensityRealTime() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {displayedLines.map((lineBlock) => {
           const isOpen = expandedLine === lineBlock.line
-          const estimatedHeight = 24 + lineBlock.stations.length * 72
-          const drawerMax = isOpen ? 3*Math.min(estimatedHeight, 900) : 0
+          const estimatedHeight = 24 + lineBlock.stations.length * 72 // header + station rows
+          const drawerMax = isOpen ? Math.min(estimatedHeight, 900) : 0
 
           return (
             <div key={lineBlock.line} style={{ borderRadius: 12, overflow: 'hidden', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
@@ -143,8 +144,8 @@ export default function StationDensityRealTime() {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '14px 16px',
-                  background: isOpen ? '#f0f8ff' : '#007aff',
-                  color: isOpen ? '#007aff' : '#fff',
+                  background: isOpen ? '#f0f8ff' : '#a952ecff',
+                  color: isOpen ? '#a952ecff' : '#fff',
                   border: 'none',
                   textAlign: 'left',
                   fontSize: 16,

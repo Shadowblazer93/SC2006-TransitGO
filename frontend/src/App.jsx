@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import CreateAccount from "./pages/CreateAccount";
 import StationDensityRealTime from "./pages/StationDensityRealTime";
+import StationDensityForecast from "./pages/StationDensityForecast";
+import TrainServiceAlerts from "./pages/TrainServiceAlerts";
 import UserComponent from "./components/UserComponent";
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
       {/* Main App Pages */}
       <Route path="/users" element={<UserComponent />} />
       <Route path="/stationdensityrealtime" element={<StationDensityRealTime />} />
+      <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
+      <Route path="/trainservicealerts" element={<TrainServiceAlerts />} />
     </Routes>
   );
 }
