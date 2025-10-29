@@ -8,6 +8,8 @@ import userIcon from "../../assets/Admin//userAccounts.png";
 import metricsIcon from "../../assets/Admin/metrics.png";
 import heatmapIcon from "../../assets/Admin/issueHeatmap.png";
 import annoucementIcon from "../../assets/Admin/annoucements.png";
+import adminProfile from "../../assets/Admin/adminProfile.png";
+
 
 function AdminHomePage() {
   const features = [
@@ -45,7 +47,7 @@ function AdminHomePage() {
 
   return (
     <div className="AdminHome">
-      <Top_Bar username="Admin" />
+      <Top_Bar username="Admin" profileIcon={adminProfile} />
       {features.map((feature, index) => (
         <Homepage_Button
           key={index}
@@ -60,3 +62,4 @@ function AdminHomePage() {
 }
 
 export default AdminHomePage;
+
