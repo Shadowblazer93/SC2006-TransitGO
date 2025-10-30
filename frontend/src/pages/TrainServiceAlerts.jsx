@@ -77,8 +77,8 @@ export default function TrainServiceAlerts() {
 
   const statusColor = (s) => {
     switch(s) {
-      case 1: return '#61c035ff';
-      case 2: return '#d9534f';
+      case 1: return '#75b657ff';
+      case 2: return '#d05e5eff';
       default: return '#3e8ecbff'
     }
   }
@@ -124,8 +124,8 @@ export default function TrainServiceAlerts() {
                 minWidth: 280,
                 maxWidth: 500,
                 width: '87vw',
-                background: 'rgba(184, 99, 99, 1)',
-                border: '1px solid #ab0000ff',
+                background: statusColor(status),
+                border: `1px solid black`,
                 borderRadius: 12,
                 padding: 12,
                 boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
@@ -137,27 +137,27 @@ export default function TrainServiceAlerts() {
               <div style={{ fontSize: 14, fontWeight: 800, color: '#111' }}>{line}</div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ background: '#ffd7d7ff', padding: 8, borderRadius: 8 }}>
+                <div style={{ background: '#fff3f3ff', padding: 8, borderRadius: 8 }}>
                   <div style={{ fontSize: 12, color: '#666' }}>Status</div>
                   <div style={{ fontWeight: 600, color: statusColor(status) }}>{statusMap(status)}</div>
                 </div>
 
-                <div style={{ background: '#ffd7d7ff', padding: 8, borderRadius: 8 }}>
+                <div style={{ background: '#fff3f3ff', padding: 8, borderRadius: 8 }}>
                   <div style={{ fontSize: 12, color: '#666' }}>Direction</div>
                   <div style={{ fontWeight: 400, color: '#000' }}>{direction || '—'}</div>
                 </div>
 
-                <div style={{ background: '#ffd7d7ff', padding: 8, borderRadius: 8 }}>
+                <div style={{ background: '#fff3f3ff', padding: 8, borderRadius: 8 }}>
                   <div style={{ fontSize: 12, color: '#666' }}>Affected Stations</div>
                   <div style={{ fontWeight: 400, color: '#000' }}>{stations || '—'}</div>
                 </div>
 
-                <div style={{ background: '#ffd7d7ff', padding: 8, borderRadius: 8 }}>
+                <div style={{ background: '#fff3f3ff', padding: 8, borderRadius: 8 }}>
                   <div style={{ fontSize: 12, color: '#666' }}>Free Public Bus</div>
                   <div style={{ fontWeight: 400, color: '#000' }}>{listToString(freePublicBus) || '—'}</div>
                 </div>
 
-                <div style={{ background: '#ffd7d7ff', padding: 8, borderRadius: 8 }}>
+                <div style={{ background: '#fff3f3ff', padding: 8, borderRadius: 8 }}>
                   <div style={{ fontSize: 12, color: '#666' }}>Free MRT Shuttle</div>
                   <div style={{ fontWeight: 400, color: '#000' }}>{listToString(freeMrtShuttle) || '—'}</div>
                 </div>

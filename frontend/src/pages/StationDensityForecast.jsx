@@ -132,7 +132,7 @@ export default function StationDensityForecast() {
         {displayedLines.map((lineBlock) => {
           const isOpen = expandedLine === lineBlock.line
           const estimatedHeight = 24 + lineBlock.stations.length * 72 // header + station rows
-          const drawerMax = isOpen ? Math.min(estimatedHeight, 900) : 0
+          const drawerMax = isOpen ? 3*Math.min(estimatedHeight, 900) : 0
 
           return (
             <div key={lineBlock.line} style={{ borderRadius: 12, overflow: 'hidden', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
