@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-import adminProfile from "../assets/Admin/adminProfile.png";
 import backArrow from "../assets/Admin/left-arrow.png";
 
 const barStyle = {
@@ -41,25 +40,30 @@ const iconStyle = {
   objectFit: "cover",
 };
 
-const Top_Bar_Return = ({ username, originalPage }) => {
+const Top_Bar_Return = ({
+  pageTitle,
+  profileIcon,
+  userAdmin,
+  originalPage,
+}) => {
   const navigate = useNavigate();
 
-  const handleProfileClick = () => {
-    navigate("/profile");
+  const handleProfileClick = (userAdmin) => {
+    navigate(userAdmin === "user" ? "/UserProfile" : "/AdminProfile");
   };
 
-  const handleBackClick = () => {
-    navigate({ originalPage });
+  const handleBackClick = (originalPage) => {
+    navigate(originalPage);
   };
 
   return (
     <div style={barStyle}>
-      <div onClick={handleBackClick} style={profileStyle}>
+      <div onClick={() => handleBackClick(originalPage)} style={profileStyle}>
         <img src={backArrow} alt="back" style={iconStyle} />
       </div>
-      <h1 style={titleStyle}>{username}</h1>
-      <div onClick={handleProfileClick} style={profileStyle}>
-        <img src={adminProfile} alt="Profile" style={iconStyle} />
+      <h1 style={titleStyle}>{pageTitle}</h1>
+      <div onClick={() => handleProfileClick(userAdmin)} style={profileStyle}>
+        <img src={profileIcon} alt="Profile" style={iconStyle} />
       </div>
     </div>
   );
