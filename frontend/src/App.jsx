@@ -9,6 +9,7 @@ import TrainServiceAlerts from "./pages/TrainServiceAlerts";
 import UserComponent from "./components/UserComponent";
 import Announcements from "./pages/UserUI/Announcements";
 import AnnouncementManagement from "./pages/AdminUI/AnnouncementManagement";
+import UserManagement from "./pages/AdminUI/UserManagement";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
       {/* Admin Pages */}
       <Route path="/announcementmanagement" element={<AnnouncementManagement />} />
+      <Route path="/usermanagement" element={<UserManagement />} />
 
       {/* Main App Pages */}
       <Route path="/users" element={<UserComponent />} />

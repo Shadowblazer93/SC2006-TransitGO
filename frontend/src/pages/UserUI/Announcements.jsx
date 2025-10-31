@@ -99,17 +99,8 @@ export default function AnnouncementView() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {announcements.map((a) => (
-          <div
-            key={a.id}
-            style={{
-              background: getRandomColor(),
-              border: '1px solid #e6e6e6',
-              borderRadius: 10,
-              padding: 12,
-              boxShadow: '0 6px 18px rgba(0,0,0,0.04)'
-            }}
-          >
-            {a.title && <div style={{ fontSize: 16, fontWeight: 800, color: '#111', marginBottom: 6 }}>{a.title}</div>}
+          <div key={a.id} style={{ background: getRandomColor(), border: '1px solid #eee', borderRadius: 10, padding: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+            {a.title && <div style={{ fontSize: 20, fontWeight: 700, color: '#111', marginBottom: 6 }}>{a.title}</div>}
             <div style={{ marginBottom: 8, whiteSpace: 'pre-wrap', color: '#111' }}>{a.message}</div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', fontSize: 13, color: '#666' }}>
