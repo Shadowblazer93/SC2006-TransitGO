@@ -10,44 +10,47 @@ import heatmapIcon from "../../assets/Admin/issueHeatmap.png";
 import annoucementIcon from "../../assets/Admin/annoucements.png";
 import adminProfile from "../../assets/Admin/adminProfile.png";
 
-
 function AdminHomePage() {
   const features = [
     {
       icon: feedbackIcon,
       header: "User Feedback",
       desc: "Collect, review, and reply to user insights",
-      route: "/admin/feedback",
+      route: "/Feedback",
     },
     {
       icon: userIcon,
       header: "User Accounts",
       desc: "Manage user access and privileges",
-      route: "/admin/userAccounts",
+      route: "/UserAccounts",
     },
     {
       icon: metricsIcon,
       header: "System Metrics",
       desc: "Track performance and API up-time",
-      route: "/admin/systemMetrics",
+      route: "/SystemMetrics",
     },
     {
       icon: heatmapIcon,
       header: "Issue Heatmaps",
       desc: "Visualise high-impact problem zones",
-      route: "/admin/issueHeatmap",
+      route: "/IssueHeatmap",
     },
     {
       icon: annoucementIcon,
       header: "Annoucements",
       desc: "Broadcast important updates to all users",
-      route: "/admin/annoucements",
+      route: "/Annoucements",
     },
   ];
 
   return (
     <div className="AdminHome">
-      <Top_Bar username="Admin" profileIcon={adminProfile} />
+      <Top_Bar
+        pageTitle="Admin Profile"
+        profileIcon={adminProfile}
+        userAdmin={"admin"}
+      />
       {features.map((feature, index) => (
         <Homepage_Button
           key={index}
@@ -62,4 +65,3 @@ function AdminHomePage() {
 }
 
 export default AdminHomePage;
-
