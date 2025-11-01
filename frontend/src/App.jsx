@@ -10,6 +10,7 @@ import UserComponent from "./components/UserComponent";
 import Announcements from "./pages/UserUI/Announcements";
 import AnnouncementManagement from "./pages/AdminUI/AnnouncementManagement";
 import UserManagement from "./pages/AdminUI/UserManagement";
+import UserFeedbackList from "./pages/AdminUI/UserFeedbackList";
 
 //Import Admin Pages
 import AdminHomePage from "./pages/AdminPages/AdminHomePage";
@@ -27,13 +28,14 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/create-account" element={<CreateAccount />} />
+      <Route path="/signup" element={<CreateAccount />} />
 
       {/* Admin Pages */}
       <Route path="/AdminHomePage" element={<AdminHomePage />} />
       <Route path="/AdminProfile" element={<AdminProfilePage />} />
       <Route path="/announcementmanagement" element={<AnnouncementManagement />} />
       <Route path="/usermanagement" element={<UserManagement />} />
+      <Route path="/userfeedbacklist" element={<UserFeedbackList />} />
 
       {/* Main App Pages */}
       <Route path="/UserHomePage" element={<UserHomePage />} />
