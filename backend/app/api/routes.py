@@ -155,6 +155,10 @@ async def delete_feedback_entry(feedback_id: int):
 
 @router.get("/feedbacks/{feedback_id}/replies")
 async def read_feedback_resplies(feedback_id: int):
-    resp = list_reply_for_feedback(feedback_id)
+    resp = list_replies(feedback_id)
     return resp
 
+@router.delete("/feedbacks/{feedback_id}/replies/{reply_id}")
+async def delete_feedback_reply(feedback_id: int, reply_id: int):
+    resp = delete_reply(reply_id)
+    return {"message": "Reply deleted successfully", "data": resp.data}

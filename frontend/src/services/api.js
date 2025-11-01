@@ -147,7 +147,7 @@ export const trafficIncidents = async () => {
 
 export const getFeedbacks= async () => {
     try {
-        const response = await axios.get(`${API_URL}/feedbacks`);
+        const response = await axios.get(`${API_URL}/feedbacks/`);
         return response.data;
     } catch (error) {
         console.error('Error fetching feedbacks:', error);
@@ -158,6 +158,22 @@ export const getFeedbacks= async () => {
 export const deleteFeedback = async (id) => {
   try {
     const response = await axios.delete(`${API_URL}/feedbacks/${id}`, {
+    });
+    return response.status === 204 || response.data === "" ? null : response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.detail || error.message);
+  }
+};
+
+export const getReplies= async (feedbackId) => {
+  const { data } = await axios.get(`${API_URL}/feedbacks/${feedbackId}/replies`);
+  // Expected: [{ id, created_at, content, user: { username } }]
+  return Array.isArray(data) ? data : [];
+}
+
+export const deleteReply= async (feedbackId,replyId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/feedbacks/${feedbackId}/replies/${replyId}`, {
     });
     return response.status === 204 || response.data === "" ? null : response.data;
   } catch (error) {

@@ -38,11 +38,33 @@ def delete_feedback(feedback_id: int):
         raise e
     return resp
 
-def list_reply_for_feedback(feedback_id: int):
+def list_replies(feedback_id: int):
+    """
+    Return replies for a feedback with author username and timestamp.
+    Shape: [{id, content, created_at, author}]
+    """
+    # Let PostgREST infer the FK replies.user_id -> users.id
+    sel = "id, content, created_at, user:users(username)"
+    resp = supabase.table("replies") \
+        .select(sel) \
+        .eq("feedback_id", feedback_id) \
+        .order("created_at", desc=False) \
+        .execute()
+    
+    print(resp.data)
+
+    rows = resp.data or []
+    # Flatten: user.username -> author
+    for r in rows:
+        r["author"] = (r.get("user") or {}).get("username") or "Unknown"
+        r.pop("user", None)
+        print(r)
+    return rows
+
+def delete_reply(reply_id: int):
     try:
-        resp = supabase.table("replies").select("*").eq("feedback_id", feedback_id).execute()
-        print(resp.data)
+        resp = supabase.table("replies").delete().eq("id", reply_id).execute()
     except Exception as e:
-        print("Error listing feedback responses:", str(e))
+        print("Error deleting reply:", str(e))
         raise e
-    return resp.data
+    return resp
