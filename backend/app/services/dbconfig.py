@@ -18,26 +18,18 @@ def get_specific_user(user_id:UUID ):
     return resp
 
 def list_feedbacks():
-    # Embed the related users row (only username)
-    # If FK name is feedback_user_id_fkey, use the !<fk_name> form.
     try:
-    
-        sel = """
-        id, created_at, title, description, type, rating,
-        users:users!feedback_user_id_fkey ( username )
-        """
+        sel = "id,created_at,title,description,type,rating,user:users(username)"
+        #            ^ alias     ^ inferred relation to users via feedback.user_id
         resp = supabase.table("feedback").select(sel).order("created_at", desc=True).execute()
         rows = resp.data or []
-
-        # Flatten: users.username  -> username
         for r in rows:
-            r["username"] = (r.get("users") or {}).get("username")
-            r.pop("users", None)
+            r["username"] = (r.get("user") or {}).get("username")
+            r.pop("user", None)
         return rows
     except Exception as e:
         print("Error listing feedbacks:", str(e))
         raise e
-
 def delete_feedback(feedback_id: int):
     try:
         resp = supabase.table("feedback").delete().eq("id", feedback_id).execute()
