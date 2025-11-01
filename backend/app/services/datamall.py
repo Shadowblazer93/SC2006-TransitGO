@@ -312,6 +312,33 @@ def get_traffic_incidents():
         print("LTA API request failed:", e)
         return []
 
+def get_geospacial_whole_island(id:int):
+    if not DATAMALL_API_KEY:
+        print("API key not found. Please set it in your .env file.")
+        return []
+    
+    if not id: raise ValueError("id is required")
+
+    url = "https://datamall2.mytransport.sg/ltaodataservice/GeospatialWholeIsland"
+    headers = {
+        "AccountKey": DATAMALL_API_KEY,
+        "accept": "application/json"
+    }
+    params = {"ID": id}
+
+    try:
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        bus_arrivals = data.get("value", [])
+        if not bus_arrivals: print("No geospatial data returned. Your API key may not be subscribed to the dataset.")
+        else: print(f"Retrieved {len(bus_arrivals)} returned successfully.")
+        return bus_arrivals
+
+    except requests.exceptions.RequestException as e:
+        print("LTA API request failed:", e)
+        return []
+
 # Example usage
 if __name__ == "__main__":
     stops = get_bus_stops()

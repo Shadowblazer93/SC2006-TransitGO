@@ -101,6 +101,14 @@ def traffic_incidents():
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/geospatialwholeisland/{id}")
+def station_crowddensityforecast(id:str):
+    try:
+        data = get_geospacial_whole_island(id)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate):

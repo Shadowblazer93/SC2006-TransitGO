@@ -116,7 +116,7 @@ const NewAccount = () => {
             </button>
 
             <button
-              onClick={handleBack}
+              // onClick={handleBack}
               className="w-full text-blue-600 text-sm hover:underline"
             >
               Back to Login
