@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabaseClient";
 
 //Import Components
 import Top_Bar_Return from "../../components/Top_Bar_Return";
@@ -53,7 +55,57 @@ const actionDescStyle = {
   padding: "1px",
 };
 
-function UserProfilePage({ userName, userEmail }) {
+function UserProfilePage() {
+  async function getAccessToken() {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+
+    if (error) {
+      console.error("Error getting session:", error.message);
+      return null;
+    }
+
+    if (session) {
+      return session.access_token;
+    } else {
+      console.log("No active session found.");
+      return null;
+    }
+  }
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const token = await getAccessToken();
+        if (!token) return;
+
+        const { data, error } = await supabase.auth.getUser();
+        if (error) {
+          console.error("Error fetching user:", error);
+          return;
+        }
+
+        const user = data.user;
+        if (!user || !mounted) return;
+
+        const name = user.display_name || user.email.split("@")[0] || "";
+        setUserName(name);
+        setUserEmail(user.email || "");
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const navigate = useNavigate();
 
   const handleActionClick = (route) => {
@@ -74,7 +126,7 @@ function UserProfilePage({ userName, userEmail }) {
         <a className="detailHeader" style={headerStyle}>
           User Name
         </a>
-        {/*I dont know how to get the username and email from database....pls help*/}
+
         <a className="detailData" style={dataStyle}>
           {userName}
         </a>
