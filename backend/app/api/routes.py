@@ -140,3 +140,13 @@ async def update_user(user_id: int, user: UserCreate):
 async def delete_user(user_id: int):
     # Logic to delete a user by ID
     pass
+
+@router.get("/feedbacks/")
+async def read_feedbacks():
+    resp = list_feedbacks()
+    return resp
+
+@router.delete("/feedbacks/{feedback_id}")
+async def delete_feedback_entry(feedback_id: int):
+    resp = delete_feedback(feedback_id)
+    return {"message": "Feedback deleted successfully", "data": resp.data}

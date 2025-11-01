@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-import adminProfile from "../assets/Admin/adminProfile.png";
-
 const barStyle = {
   display: "flex",
   justifyContent: "space-between",
@@ -30,9 +28,7 @@ const profileStyle = {
   width: "36px",
   height: "36px",
   borderRadius: "50%",
-  backgroundColor: "#E0E0E0", // Optional: light bg for icon container
   overflow: "hidden",
-  border: "1px solid #CCC",
 };
 
 const iconStyle = {
@@ -42,19 +38,19 @@ const iconStyle = {
   objectFit: "cover",
 };
 
-const Top_Bar = ({ username }) => {
+const Top_Bar = ({ pageTitle, profileIcon, userAdmin }) => {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate(userAdmin === "user" ? "/UserProfile" : "/AdminProfile");
   };
 
   return (
     <div style={barStyle}>
       <div style={{ width: "24px" }} />
-      <h1 style={titleStyle}>{username}</h1>
+      <h1 style={titleStyle}>{pageTitle}</h1>
       <div onClick={handleProfileClick} style={profileStyle}>
-        <img src={adminProfile} alt="Profile" style={iconStyle} />
+        <img src={profileIcon} alt="Profile" style={iconStyle} />
       </div>
     </div>
   );

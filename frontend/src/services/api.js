@@ -144,3 +144,23 @@ export const trafficIncidents = async () => {
         throw error;
     }
 }
+
+export const getFeedbacks= async () => {
+    try {
+        const response = await axios.get(`${API_URL}/feedbacks`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching feedbacks:', error);
+        throw error;
+    }
+}
+
+export const deleteFeedback = async (id) => {
+  try {
+    const response = await axios.delete(`${API_URL}/feedbacks/${id}`, {
+    });
+    return response.status === 204 || response.data === "" ? null : response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.detail || error.message);
+  }
+};

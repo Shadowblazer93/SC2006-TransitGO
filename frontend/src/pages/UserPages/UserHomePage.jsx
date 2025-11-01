@@ -21,61 +21,65 @@ function UserHomePage() {
       icon: mapIcon,
       header: "Interactive Map",
       desc: "Explore routes, stations and services",
-      route: "/user/interactiveMap",
+      route: "/InteractiveMap",
     },
     {
       icon: userIcon,
       header: "Platform Crowdedness",
       desc: "Check live platofrm crowd levels",
-      route: "/user/PlatformCrowdedness",
+      route: "/PlatformCrowdedness",
     },
     {
       icon: trainIcon,
       header: "MRT Services Availability",
       desc: "Check MRT stations' live status",
-      route: "/user/mrtServiceAvailability",
+      route: "/MrtServiceAvailability",
     },
     {
       icon: calculatorIcon,
       header: "Fare Calculator",
       desc: "Estimate travel costs to destinations",
-      route: "/user/fareCalculator",
+      route: "/FareCalculator",
     },
     {
       icon: favouriteIcon,
       header: "Favourites",
       desc: "View saved services and lcoations",
-      route: "/user/favourites",
+      route: "/Favourites",
     },
     {
       icon: routeIcon,
       header: "Saved Routes",
       desc: "View planned routes",
-      route: "/user/savedRoutes",
+      route: "/SavedRoutes",
     },
     {
       icon: downloadIcon,
       header: "Downloaded Area",
       desc: "Navigate offline using downloaded map regions",
-      route: "/user/downloadedArea",
+      route: "/DownloadedArea",
     },
     {
       icon: historyIcon,
       header: "Trip History",
       desc: "View latest trips and searches",
-      route: "/user/tripHistory",
+      route: "/TripHistory",
     },
     {
       icon: feedbackIcon,
       header: "Feedback",
       desc: "Track past submission or share new feedback",
-      route: "/user/userFeedback",
+      route: "/UserFeedback",
     },
   ];
 
   return (
     <div className="UserHome">
-      <Top_Bar username="User" profileIcon={userProfile} />
+      <Top_Bar
+        pageTitle="User Profile"
+        profileIcon={userProfile}
+        userAdmin={"user"}
+      />
       {features.map((feature, index) => (
         <Homepage_Button
           key={index}
