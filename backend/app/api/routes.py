@@ -132,3 +132,8 @@ async def update_user(user_id: int, user: UserCreate):
 async def delete_user(user_id: int):
     # Logic to delete a user by ID
     pass
+
+@router.get("/feedbacks/")
+async def read_feedbacks():
+    resp = get_feedbacks()
+    return resp.data

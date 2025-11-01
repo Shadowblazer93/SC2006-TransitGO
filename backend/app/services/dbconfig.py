@@ -15,3 +15,11 @@ def get_specific_user(user_id: int):
     resp = supabase.table("users").select("*").eq("id",user_id).single().execute()
     print(resp.data)
     return resp
+
+def get_feedbacks():
+    try:
+        resp = supabase.table("feedback").select("*").execute()
+    except Exception as e:
+        print("Error fetching feedbacks:", str(e))
+        raise e
+    return resp
