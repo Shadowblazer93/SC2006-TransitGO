@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from uuid import UUID
 from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse
 from app.services.datamall import *
@@ -116,7 +117,7 @@ async def create_user(user: UserCreate):
     pass
 
 @router.get("/users/{user_id}", response_model=UserResponse)
-async def read_user(user_id: int):
+async def read_user(user_id: UUID):
     #basic checking to see if db can be accessed
     resp = get_specific_user(user_id)
     return resp.data
@@ -132,7 +133,7 @@ async def read_users():
     pass
 
 @router.put("/users/{user_id}", response_model=UserResponse)
-async def update_user(user_id: int, user: UserCreate):
+async def update_user(user_id: UUID, user: UserCreate):
     # Logic to update a user by ID
     pass
 
@@ -150,3 +151,10 @@ async def read_feedbacks():
 async def delete_feedback_entry(feedback_id: int):
     resp = delete_feedback(feedback_id)
     return {"message": "Feedback deleted successfully", "data": resp.data}
+
+
+@router.get("/feedbacks/{feedback_id}/replies")
+async def read_feedback_resplies(feedback_id: int):
+    resp = list_reply_for_feedback(feedback_id)
+    return resp
+
