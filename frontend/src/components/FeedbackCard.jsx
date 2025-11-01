@@ -45,7 +45,7 @@ export default function FeedbackCard({ fb, onReply, onDelete }) {
         <div className="grid h-9 w-9 place-items-center rounded-full bg-gray-100 text-lg">👤</div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="truncate text-sm font-semibold">{fb.user_name || "User"}</span>
+            <span className="truncate text-sm font-semibold">{fb.username || "User"}</span>
             <span className="text-gray-300">•</span>
             <Stars value={fb.rating} />
           </div>

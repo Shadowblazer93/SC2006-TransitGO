@@ -135,5 +135,10 @@ async def delete_user(user_id: int):
 
 @router.get("/feedbacks/")
 async def read_feedbacks():
-    resp = get_feedbacks()
-    return resp.data
+    resp = list_feedbacks()
+    return resp
+
+@router.delete("/feedbacks/{feedback_id}")
+async def delete_feedback_entry(feedback_id: int):
+    resp = delete_feedback(feedback_id)
+    return {"message": "Feedback deleted successfully", "data": resp.data}

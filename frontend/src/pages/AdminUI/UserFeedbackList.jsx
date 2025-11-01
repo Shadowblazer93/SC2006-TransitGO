@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import FeedbackCard from "../../components/FeedbackCard.jsx";
-import { getFeedbacks } from "../../services/api.js";
+import { getFeedbacks,deleteFeedback } from "../../services/api.js";
 
 
 export default function FeedbackPage() {
@@ -37,20 +37,19 @@ export default function FeedbackPage() {
     );
   }, [data, q]);
 
-  const onDelete = async (id) => {
-    if (!confirm("Delete this feedback?")) return;
-    try {
-      const res = await fetch(`${API_BASE}/feedbacks/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setData((prev) => prev.filter((x) => x.id !== id));
-    } catch (e) {
-      alert(`Failed to delete: ${e.message}`);
-    }
-  };
+const onDelete = async (id) => {
+  if (!confirm("Delete this feedback?")) return;
 
+  const prevData = data;
+  setData((cur) => cur.filter((x) => x.id !== id));  // optimistic UI
+
+  try {
+    await deleteFeedback(id);
+  } catch (e) {
+    setData(prevData);         // rollback UI
+    alert(`Failed to delete: ${e.message}`);
+  }
+};
   return (
     <div className="min-h-screen w-full bg-neutral-100">
       {/* Phone frame */}

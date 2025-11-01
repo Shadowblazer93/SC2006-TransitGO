@@ -35,7 +35,7 @@ function App() {
       <Route path="/AdminProfile" element={<AdminProfilePage />} />
       <Route path="/announcementmanagement" element={<AnnouncementManagement />} />
       <Route path="/usermanagement" element={<UserManagement />} />
-      <Route path="/userfeedbacklist" element={<UserFeedbackList />} />
+      <Route path="/Feedback" element={<UserFeedbackList />} />
 
       {/* Main App Pages */}
       <Route path="/UserHomePage" element={<UserHomePage />} />
