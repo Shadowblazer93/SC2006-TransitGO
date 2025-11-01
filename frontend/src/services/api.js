@@ -1,7 +1,14 @@
 import axios from 'axios';
+import { supabase } from '../supabaseClient';
 
 const API_URL = 'http://localhost:8000/api';
-
+//TODO: Update Users table everytime a new user signs up. If not problems will arise when fetching user-related data.
+async function authHeader() {
+  const { data: { session} } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  console.log("Bearer", token?.slice(0,12));
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 export const getUsers = async () => {
     try {
         const response = await axios.get(`${API_URL}/users`);
@@ -165,11 +172,10 @@ export const deleteFeedback = async (id) => {
   }
 };
 
-export const getReplies= async (feedbackId) => {
-  const { data } = await axios.get(`${API_URL}/feedbacks/${feedbackId}/replies`);
-  // Expected: [{ id, created_at, content, user: { username } }]
+export const getReplies = async (feedbackId) => {
+  const { data } = await axios.get(`${API_URL}/feedbacks/${encodeURIComponent(feedbackId)}/replies`);
   return Array.isArray(data) ? data : [];
-}
+};
 
 export const deleteReply= async (feedbackId,replyId) => {
   try {
@@ -179,4 +185,12 @@ export const deleteReply= async (feedbackId,replyId) => {
   } catch (error) {
     throw new Error(error?.response?.data?.detail || error.message);
   }
+};
+
+export const postReply = async (feedbackId, content) => {
+  const headers = await authHeader();
+  const body = { content: String(content ?? '').trim() };
+  if (!body.content) throw new Error('Reply content cannot be empty');
+  const { data } = await axios.post(`${API_URL}/feedbacks/${encodeURIComponent(feedbackId)}/replies`, body, { headers });
+  return data;
 };

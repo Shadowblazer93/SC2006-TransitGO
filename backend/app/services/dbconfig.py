@@ -1,7 +1,8 @@
-import os
+import os,jwt
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from uuid import UUID
+from fastapi import Header, HTTPException
 
 # Supabase API Key and URL will be in the telegram.
 # Add environment variable "SUPABASE_URL" and "SUPBASE_KEY" with value of the API key to your device.
@@ -11,7 +12,22 @@ load_dotenv()
 url=os.getenv("SUPABASE_URL")
 key=os.getenv("SUPABASE_KEY")
 supabase: Client=create_client(url,key)
+SUPABASE_JWT_SECRET = os.environ["SUPABASE_JWT_SECRET"]
 
+sb: Client = create_client(url,key)
+
+
+def get_current_user_uuid(authorization: str = Header(...)) -> UUID:
+    if not authorization or not authorization.lower().startswith("bearer "):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing bearer token")
+    token = authorization.split(" ", 1)[1]
+    try:
+        resp = sb.auth.get_user(token)  # Supabase verifies and returns the user
+        uid = resp.user.id
+        return UUID(uid)
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    
 def get_specific_user(user_id:UUID ):
     resp = supabase.table("users").select("*").eq("uid",user_id).single().execute()
     print(resp.data)
@@ -44,7 +60,7 @@ def list_replies(feedback_id: int):
     Shape: [{id, content, created_at, author}]
     """
     # Let PostgREST infer the FK replies.user_id -> users.id
-    sel = "id, content, created_at, user:users(username)"
+    sel = "id, content, created_at, user_id, user:users!replies_user_uid_fkey(username)"
     resp = supabase.table("replies") \
         .select(sel) \
         .eq("feedback_id", feedback_id) \

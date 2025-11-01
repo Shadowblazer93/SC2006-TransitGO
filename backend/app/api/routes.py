@@ -1,7 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException,Depends,Header 
 from uuid import UUID
 from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse,ReplyIn
 from app.services.datamall import *
 from app.services.dbconfig import *
 
@@ -162,3 +162,32 @@ async def read_feedback_resplies(feedback_id: int):
 async def delete_feedback_reply(feedback_id: int, reply_id: int):
     resp = delete_reply(reply_id)
     return {"message": "Reply deleted successfully", "data": resp.data}
+
+
+@router.post("/feedbacks/{fid}/replies", status_code=201)
+def create_reply(fid: int, body: ReplyIn, user_uuid: UUID = Depends(get_current_user_uuid)):
+    msg = (body.content or "").strip()
+    if not msg:
+        raise HTTPException(status_code=400, detail="Reply content cannot be empty")
+
+    ins = {"feedback_id": fid, "user_id": str(user_uuid), "content": msg}
+    print("DEBUG insert payload:", ins)  # TEMP
+
+    try:
+        resp = supabase.table("replies").insert(ins).execute()
+        print("DEBUG insert resp:", resp.data)  # TEMP
+    except Exception as e:
+        # This will show the exact FK/constraint error from PostgREST/Postgres
+        print("DEBUG insert error:", repr(e))
+        raise HTTPException(status_code=500, detail="Insert failed")
+
+    row = (resp.data or [None])[0]
+    if not row:
+        raise HTTPException(status_code=500, detail="Insert returned no row")
+
+    return {
+        "id": row["id"],
+        "content": row["content"],
+        "created_at": row["created_at"],
+        "user_id": row["user_id"],
+    }

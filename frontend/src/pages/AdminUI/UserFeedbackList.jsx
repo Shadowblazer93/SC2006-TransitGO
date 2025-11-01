@@ -5,6 +5,7 @@ import {
   deleteFeedback,
   getReplies,
   deleteReply,
+  postReply
 } from "../../services/api.js";
 
 export default function FeedbackPage() {
@@ -119,6 +120,50 @@ export default function FeedbackPage() {
     }
   };
 
+  // insert a temporary reply into the open thread (optimistic)
+const optimisticAddReply = (fid, tempReply) => {
+  setRepliesMap((m) => {
+    const cur = m[fid] ?? { phase: "ready", items: [], error: null };
+    return {
+      ...m,
+      [fid]: {
+        ...cur,
+        items: [...(cur.items ?? []), tempReply],
+        phase: "ready",
+        error: null,
+      },
+    };
+  });
+};
+
+// replace temp reply with the saved one from server
+const resolveOptimistic = (fid, tempId, saved) => {
+  setRepliesMap((m) => {
+    const cur = m[fid];
+    if (!cur?.items) return m;
+    return {
+      ...m,
+      [fid]: {
+        ...cur,
+        items: cur.items.map((r) => (r.id === tempId ? saved : r)),
+      },
+    };
+  });
+};
+
+// rollback removal of temp reply on error
+const rollbackOptimistic = (fid, tempId) => {
+  setRepliesMap((m) => {
+    const cur = m[fid];
+    if (!cur?.items) return m;
+    return {
+      ...m,
+      [fid]: { ...cur, items: cur.items.filter((r) => r.id !== tempId) },
+    };
+  });
+};
+
+
   return (
     <div className="min-h-screen w-full bg-neutral-100">
       {/* Phone frame */}
@@ -202,19 +247,32 @@ export default function FeedbackPage() {
 
       {/* Reply Drawer */}
       <ReplyDrawer
-        fb={selected}
-        onClose={() => setSelected(null)}
-        onSubmit={async (message) => {
-          try {
-            await postReply(selected.id, message);
-            alert("Reply sent!");
-            setSelected(null);
-            await refreshOpenThreadIfNeeded(selected.id);
-          } catch (e) {
-            alert(`Failed to send reply: ${e.message}`);
-          }
-        }}
-      />
+  fb={selected}
+  onClose={() => setSelected(null)}
+  onSubmit={async (message) => {
+    const fid = selected.id;
+    const isOpen = openId === fid;
+    const tempId = `temp-${Date.now()}`;
+    const temp = {
+      id: tempId,
+      content: message,
+      created_at: new Date().toISOString(),
+      username: "Me", // optional: derive from supabase.auth.getUser()
+      _optimistic: true,
+    };
+    if (isOpen) optimisticAddReply(fid, temp);
+
+    try {
+      const saved = await postReply(fid, message);
+      if (isOpen) resolveOptimistic(fid, tempId, saved);
+      setSelected(null);
+      alert("Reply sent!");
+    } catch (e) {
+      if (isOpen) rollbackOptimistic(fid, tempId);
+      alert(`Failed to send reply: ${e.message}`);
+    }
+  }}
+/>
     </div>
   );
 }
@@ -331,7 +389,7 @@ function ReplyDrawer({ fb, onClose, onSubmit }) {
 
           <label className="mb-1 block text-[12px] font-semibold">Reply</label>
           <textarea
-            className="min-h=[120px] w-full resize-y rounded-xl border border-neutral-200 p-3 text-[13px] focus:border-blue-500 focus:outline-none"
+            className="min-h-[120px] w-full resize-y rounded-xl border border-neutral-200 p-3 text-[13px] focus:border-blue-500 focus:outline-none"
             placeholder="Enter your reply here."
             value={message}
             onChange={(e) => setMessage(e.target.value)}

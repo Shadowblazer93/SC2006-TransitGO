@@ -19,3 +19,6 @@ class UserResponse(UserBase):
 
     class Config:
         orm_mode = True
+
+class ReplyIn(BaseModel):
+    content: str
