@@ -11,6 +11,7 @@ import Announcements from "./pages/UserUI/Announcements";
 import AnnouncementManagement from "./pages/AdminUI/AnnouncementManagement";
 import UserManagement from "./pages/AdminUI/UserManagement";
 import UserFeedbackList from "./pages/AdminUI/UserFeedbackList";
+import Routing from "./pages/Routing";
 
 //Import Admin Pages
 import AdminHomePage from "./pages/AdminPages/AdminHomePage";
@@ -45,6 +46,7 @@ function App() {
       <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
       <Route path="/trainservicealerts" element={<TrainServiceAlerts />} />
       <Route path="/announcements" element={<Announcements />} />
+      <Route path="/routing" element={<Routing />} />
     </Routes>
   );
 }
