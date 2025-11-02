@@ -12,6 +12,7 @@ import AnnouncementManagement from "./pages/AdminUI/AnnouncementManagement";
 import UserManagement from "./pages/AdminUI/UserManagement";
 import UserFeedbackList from "./pages/AdminUI/UserFeedbackList";
 import Routing from "./pages/Routing";
+import CreatePassword from "./pages/CreatePassword";
 
 //Import Admin Pages
 import AdminHomePage from "./pages/AdminPages/AdminHomePage";
@@ -28,7 +29,8 @@ function App() {
       {/* Auth Pages */}
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/forgot-password" element={<ResetPassword />} />
+      <Route path="/reset-password" element={<CreatePassword />} />
       <Route path="/signup" element={<CreateAccount />} />
 
       {/* Admin Pages */}

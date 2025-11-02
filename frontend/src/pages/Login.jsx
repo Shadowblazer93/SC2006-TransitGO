@@ -17,7 +17,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleForgotPassword = () => {
-    navigate("/reset-password");
+    navigate("/forgot-password");
   };
 
   const handleLogin = async (e) => {
