@@ -2,7 +2,7 @@ import os,jwt
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from uuid import UUID
-from fastapi import Header, HTTPException
+from fastapi import Header, HTTPException,Depends
 
 # Supabase API Key and URL will be in the telegram.
 # Add environment variable "SUPABASE_URL" and "SUPBASE_KEY" with value of the API key to your device.
@@ -11,7 +11,9 @@ from fastapi import Header, HTTPException
 load_dotenv()
 url=os.getenv("SUPABASE_URL")
 key=os.getenv("SUPABASE_KEY")
+svc_key = os.environ["SUPABASE_SVC_KEY"]
 supabase: Client=create_client(url,key)
+admin: Client=create_client(url,svc_key)
 
 sb: Client = create_client(url,key)
 
@@ -83,3 +85,9 @@ def delete_reply(reply_id: int):
         print("Error deleting reply:", str(e))
         raise e
     return resp
+
+def delete_account(uid: UUID = Depends(get_current_user_uuid)):
+    try:
+        admin.auth.admin.delete_user(str(uid))   # deletes from auth.users
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Delete failed: {e}")

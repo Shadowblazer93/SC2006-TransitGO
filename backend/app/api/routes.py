@@ -191,3 +191,9 @@ def create_reply(fid: int, body: ReplyIn, user_uuid: UUID = Depends(get_current_
         "created_at": row["created_at"],
         "user_id": row["user_id"],
     }
+@router.delete("/UserProfile")
+def delete_user_account(uid: UUID = Depends(get_current_user_uuid)):
+    resp = delete_account(uid)
+    return {"message": "Account deleted successfully"}
+
+    

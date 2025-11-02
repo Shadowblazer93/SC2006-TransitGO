@@ -2,7 +2,7 @@ import axios from 'axios';
 import { supabase } from '../supabaseClient';
 
 const API_URL = 'http://localhost:8000/api';
-//TODO: Update Users table everytime a new user signs up. If not problems will arise when fetching user-related data.
+
 async function authHeader() {
   const { data: { session} } = await supabase.auth.getSession();
   const token = session?.access_token;
@@ -194,3 +194,34 @@ export const postReply = async (feedbackId, content) => {
   const { data } = await axios.post(`${API_URL}/feedbacks/${encodeURIComponent(feedbackId)}/replies`, body, { headers });
   return data;
 };
+
+export async function deleteAccount() {
+  if (!confirm("This will permanently delete your account. Continue?")) return;
+
+  // get bearer header using helper
+  const headers = await authHeader();
+  if (!headers.Authorization) {
+    alert("Please sign in again.");
+    return;
+  }
+
+  try {
+    // no userId in URL or body — backend derives it from the token
+    const res = await axios.delete(`${API_URL}/UserProfile`, { headers });
+
+    // handle 200/204 or empty body
+    if (res.status === 200 || res.status === 204) {
+      await supabase.auth.signOut({ scope: "global" });
+      window.location.assign("/login"); // or /login
+      return;
+    }
+    // fallback if some other 2xx with body
+    console.log("Delete response:", res.data);
+    await supabase.auth.signOut({ scope: "global" });
+    window.location.assign("/goodbye");
+  } catch (err) {
+    console.error("Delete failed:", err);
+    const msg = err?.response?.data?.detail || err?.message || "Failed to delete account.";
+    alert(msg);
+  }
+}

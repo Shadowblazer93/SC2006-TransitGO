@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import { deleteAccount } from "../../services/api";
 
 //Import Components
 import Top_Bar_Return from "../../components/Top_Bar_Return";
@@ -168,7 +169,7 @@ function UserProfilePage() {
         <a
           className="actionDesc"
           style={actionDescStyle}
-          onClick={() => handleActionClick("/UserHomePage")}
+          onClick={deleteAccount}
         >
           Delete Account
         </a>
