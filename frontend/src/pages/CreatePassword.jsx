@@ -1,6 +1,7 @@
 // ResetPassword.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 function parseHashParams() {
   const hash = window.location.hash.startsWith("#")
@@ -95,7 +96,7 @@ export default function ResetPassword() {
               <p className="text-sm text-red-600">
                 {err || "Invalid or expired recovery link. Please request a new one."}
               </p>
-              <a href="/forgot" className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-500">
+              <a href="/forgot-password" className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-500">
                 Request a new reset link
               </a>
             </div>
@@ -108,7 +109,7 @@ export default function ResetPassword() {
                   value={pw}
                   onChange={(e) => setPw(e.target.value)}
                   required
-                  minLength={8}
+                  minLength={6}
                   placeholder="••••••••"
                   className="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   autoFocus
