@@ -111,6 +111,12 @@ function UserProfilePage() {
   const handleActionClick = (route) => {
     navigate(route);
   };
+
+  async function logout() {
+    const { error } = await supabase.auth.signOut(); 
+    if (error) console.error(error);
+    else navigate("/Login");
+}
   return (
     <div>
       <Top_Bar_Return
@@ -152,7 +158,7 @@ function UserProfilePage() {
         <a
           className="actionDesc"
           style={actionDescStyle}
-          onClick={() => handleActionClick("/Login")}
+          onClick={logout}
         >
           Logout
         </a>
