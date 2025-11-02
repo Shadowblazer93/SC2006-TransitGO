@@ -1,7 +1,6 @@
 // ResetPassword.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "../supabaseClient";
-import { useNavigate } from "react-router-dom";
 
 function parseHashParams() {
   const hash = window.location.hash.startsWith("#")
@@ -20,37 +19,59 @@ export default function ResetPassword() {
   const [pw2, setPw2] = useState("");
   const [loading, setLoading] = useState(true);
   const [sessionReady, setSessionReady] = useState(false);
-  const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
+  const [msg, setMsg] = useState("");
+
+  // track if the user was already logged in when they landed (no recovery link)
+  const [wasLoggedIn, setWasLoggedIn] = useState(false);
 
   const { access_token, refresh_token, type } = useMemo(parseHashParams, []);
+  const isRecovery = typeof window !== "undefined" && type === "recovery";
 
   useEffect(() => {
     let cancelled = false;
-    async function ensureRecoverySession() {
+
+    async function init() {
       setLoading(true);
       setErr("");
       setMsg("");
+
       try {
-        if (access_token && refresh_token && type === "recovery") {
-          const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+        if (isRecovery && access_token && refresh_token) {
+          // Recovery mode: consume the hash by setting the session
+          const { error } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
           if (error) throw error;
           if (!cancelled) setSessionReady(true);
         } else {
+          // Logged-in mode: allow changing password using the existing session
           const { data, error } = await supabase.auth.getSession();
           if (error) throw error;
-          if (data && data.session) setSessionReady(true);
-          else throw new Error("Invalid or expired recovery link. Please request a new one.");
+          const hasSession = !!data?.session;
+          if (!cancelled) {
+            setWasLoggedIn(hasSession);
+            setSessionReady(hasSession);
+            if (!hasSession) {
+              throw new Error(
+                "Invalid or expired link. Please request a new reset link or sign in first."
+              );
+            }
+          }
         }
       } catch (e) {
-        if (!cancelled) setErr(e.message || "Unable to start recovery session.");
+        if (!cancelled) setErr(e.message || "Unable to start session.");
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
-    ensureRecoverySession();
-    return () => { cancelled = true; };
-  }, [access_token, refresh_token, type]);
+
+    init();
+    return () => {
+      cancelled = true;
+    };
+  }, [isRecovery, access_token, refresh_token]);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -60,17 +81,30 @@ export default function ResetPassword() {
     if (pw.length < 8) return setErr("Password must be at least 8 characters.");
     if (pw !== pw2) return setErr("Passwords do not match.");
 
-    const { error } = await supabase.auth.updateUser({ password: pw });
-    if (error) return setErr(error.message || "Failed to update password.");
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pw });
+      if (error) throw error;
 
-    setMsg("Password updated. You can now sign in with your new password.");
-    window.history.replaceState({}, document.title, window.location.pathname); // clear hash
+      // Clear URL hash so tokens can’t be reused on refresh
+      window.history.replaceState({}, document.title, window.location.pathname);
+      setMsg("Password updated. Please sign in with your new password.");
+
+      // If user was already logged in (i.e., no recovery link), force sign-out after change
+      if (wasLoggedIn && !isRecovery) {
+        await supabase.auth.signOut({ scope: "global" });
+        window.location.assign("/login");
+        return;
+      }
+
+    } catch (e) {
+      setErr(e.message || "Failed to update password.");
+    }
   }
 
   return (
     <div className="min-h-svh bg-[#eef1f5] flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-3xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.12)]">
-        {/* Brand row */}
+        {/* Brand */}
         <div className="px-6 pt-6 flex items-center gap-2">
           <div className="h-7 w-7 rounded-full bg-red-600 grid place-items-center ring-2 ring-red-200/60">
             <svg viewBox="0 0 24 24" className="h-4 w-4 text-white" fill="currentColor">
@@ -87,16 +121,15 @@ export default function ResetPassword() {
 
         <div className="mt-3 h-px bg-neutral-200" />
 
-        {/* Body */}
         <div className="px-6 py-5">
           {loading ? (
             <p className="text-sm text-neutral-600 mt-2">Preparing your secure session…</p>
           ) : !sessionReady ? (
             <div className="mt-2">
               <p className="text-sm text-red-600">
-                {err || "Invalid or expired recovery link. Please request a new one."}
+                {err || "Invalid or expired link. Please request a new reset link."}
               </p>
-              <a href="/forgot-password" className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-500">
+              <a href="/forgot" className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-500">
                 Request a new reset link
               </a>
             </div>
@@ -109,7 +142,7 @@ export default function ResetPassword() {
                   value={pw}
                   onChange={(e) => setPw(e.target.value)}
                   required
-                  minLength={6}
+                  minLength={8}
                   placeholder="••••••••"
                   className="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   autoFocus
@@ -144,13 +177,13 @@ export default function ResetPassword() {
                   Back to Login
                 </a>
               </div>
+
+              {/* Bottom accent */}
+              <div className="mt-6 flex justify-center">
+                <div className="h-[3px] w-28 bg-neutral-900 rounded-full" />
+              </div>
             </form>
           )}
-
-          {/* Bottom small centered underline accent */}
-          <div className="mt-6 flex justify-center">
-            <div className="h-[3px] w-28 bg-neutral-900 rounded-full" />
-          </div>
         </div>
       </div>
     </div>

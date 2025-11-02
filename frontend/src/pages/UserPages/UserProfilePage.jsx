@@ -117,6 +117,9 @@ function UserProfilePage() {
     if (error) console.error(error);
     else navigate("/Login");
 }
+  async function changePW() {
+    navigate("/reset-password");
+  }
   return (
     <div>
       <Top_Bar_Return
@@ -151,7 +154,7 @@ function UserProfilePage() {
         <a
           className="actionDesc"
           style={actionDescStyle}
-          onClick={() => handleActionClick("/UserHomePage")}
+          onClick={changePW}
         >
           Change Password
         </a>
