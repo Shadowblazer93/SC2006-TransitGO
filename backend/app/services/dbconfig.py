@@ -12,7 +12,6 @@ load_dotenv()
 url=os.getenv("SUPABASE_URL")
 key=os.getenv("SUPABASE_KEY")
 supabase: Client=create_client(url,key)
-SUPABASE_JWT_SECRET = os.environ["SUPABASE_JWT_SECRET"]
 
 sb: Client = create_client(url,key)
 
@@ -60,7 +59,7 @@ def list_replies(feedback_id: int):
     Shape: [{id, content, created_at, author}]
     """
     # Let PostgREST infer the FK replies.user_id -> users.id
-    sel = "id, content, created_at, user_id, user:users!replies_user_uid_fkey(username)"
+    sel = "id, content, created_at, user_id, user:users!replies_user_id_fkey(username)"
     resp = supabase.table("replies") \
         .select(sel) \
         .eq("feedback_id", feedback_id) \
