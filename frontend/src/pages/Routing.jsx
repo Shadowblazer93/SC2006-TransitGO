@@ -38,18 +38,18 @@ export default function Routing() {
     // load supabase user metadata (favorites) on mount
     useEffect(() => {
         const loadUser = async () => {
-            if (!supabase) {
-                // fallback to localStorage when supabase not configured
-                try {
-                    const raw = localStorage.getItem("favorites");
-                    const favs = raw ? JSON.parse(raw) : [];
-                    setFavorites(Array.isArray(favs) ? favs : []);
-                    setUserId(null);
-                } catch (err) {
-                    console.warn("Failed to load favorites from localStorage", err);
-                }
-                return;
-            }
+            // if (!supabase) {
+            //     // fallback to localStorage when supabase not configured
+            //     try {
+            //         const raw = localStorage.getItem("favorites");
+            //         const favs = raw ? JSON.parse(raw) : [];
+            //         setFavorites(Array.isArray(favs) ? favs : []);
+            //         setUserId(null);
+            //     } catch (err) {
+            //         console.warn("Failed to load favorites from localStorage", err);
+            //     }
+            //     return;
+            // }
             try {
                 const { data, error } = await supabase.auth.getUser();
                 if (error) {
@@ -58,7 +58,26 @@ export default function Routing() {
                 }
                 const user = data?.user;
                 setUserId(user?.id ?? null);
-                const favs = user?.user_metadata?.favorites ?? [];
+
+                if (!user?.id) {
+                    setFavorites([]);
+                    return;
+                }
+
+                // fetch favourites from users table -> favourite_routes (jsonb)
+                const { data: dbUser, error: dbErr } = await supabase
+                    .from("users")
+                    .select("favourite_routes")
+                    .eq("uid", user.id)
+                    .single();
+
+                if (dbErr) {
+                    console.warn("Error fetching favourite_routes from users table", dbErr);
+                    setFavorites([]);
+                    return;
+                }
+
+                const favs = dbUser?.favourite_routes ?? [];
                 setFavorites(Array.isArray(favs) ? favs : []);
             } catch (err) {
                 console.error("Error loading user/favorites", err);
@@ -68,26 +87,48 @@ export default function Routing() {
     }, []);
 
     const saveFavoritesToSupabase = async (newFavs) => {
-        // update user metadata favourites array
-        if (!supabase) {
-            // fallback: persist to localStorage
-            try {
-                localStorage.setItem("favorites", JSON.stringify(newFavs));
-            } catch {(err) => console.log(err)}
-            setFavorites(newFavs);
-            return;
-        }
+        // update users.favourite_routes JSONB column
+        // if (!supabase) {
+        //     // fallback: persist to localStorage
+        //     try {
+        //         localStorage.setItem("favorites", JSON.stringify(newFavs));
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        //     setFavorites(newFavs);
+        //     return;
+        // }
         try {
-            // supabase v2: updateUser
-            const { data, error } = await supabase.auth.updateUser({ data: { favorites: newFavs } });
+            const { data, error } = await supabase.auth.getUser();
             if (error) {
-                console.warn("supabase updateUser error", error);
-                // still update locally
+                console.warn("supabase getUser error", error);
                 setFavorites(newFavs);
                 return;
             }
-            const updatedUser = data?.user ?? data;
-            const favsFromServer = updatedUser?.user_metadata?.favorites ?? newFavs;
+            const user = data?.user;
+            if (!user?.id) {
+                setFavorites(newFavs);
+                return;
+            }
+
+            // update users table favourite_routes column
+            const { data: updatedRow, error: updateError } = await supabase
+                .from("users")
+                .update({ favourite_routes: newFavs })
+                .eq("uid", user.id)
+                .select()
+                .single();
+
+            if (updateError) {
+                console.warn("supabase update users.favourite_routes error", updateError);
+                setFavorites(newFavs);
+                return;
+            }
+            else {
+                console.log("SUCCESSFULLY SAVED")
+            }
+
+            const favsFromServer = updatedRow?.favourite_routes ?? newFavs;
             setFavorites(Array.isArray(favsFromServer) ? favsFromServer : newFavs);
         } catch (err) {
             console.error("saveFavorites error", err);
@@ -127,6 +168,7 @@ export default function Routing() {
                 itinerary: item.itinerary,
                 coords: item.coords
             };
+            console.log(favObj)
             newFavs = [favObj, ...favorites];
         }
         await saveFavoritesToSupabase(newFavs);
@@ -700,7 +742,7 @@ export default function Routing() {
                     disabled={favorites.length === 0}
                     style={{ padding: "6px 10px", fontSize: 16, background: favorites.length === 0 ? "#ddd" : "#ffcc00", color: "#000" }}
                 >
-                    {showFavoritesModal ? "Hide Favourites" : `Favourites${favorites.length ? ` (${favorites.length})` : ""}`}
+                    {showFavoritesModal ? "Favourites" : `Favourites${favorites.length ? ` (${favorites.length})` : ""}`}
                 </button>
 
             </div>
@@ -745,9 +787,9 @@ export default function Routing() {
                                 <div style={{ display: "flex", gap: 6 }}>
                                     <button
                                         onClick={(e) => { e.stopPropagation(); showItinerary(idx); setShowRoutesModal(false);}}
-                                        style={{ padding: "6px 8px", fontSize:12, fontWeight:700 }}
+                                        style={{ padding: "6px 8px", fontSize:15, fontWeight:500, background: '#cdffc7ff', borderRadius:5 }}
                                     >
-                                        Show on map
+                                        View
                                     </button>
                                 </div>
                             </div>
@@ -820,9 +862,9 @@ export default function Routing() {
                                 <div style={{ display: "flex", gap: 6 }}>
                                     <button
                                         onClick={() => showFavoriteOnMap(idx)}
-                                        style={{ padding: "6px 8px", fontSize: 12, fontWeight: 700 }}
+                                        style={{ padding: "6px 8px", fontSize:15, fontWeight:500, background: '#cdffc7ff', borderRadius:5 }}
                                     >
-                                        Show on map
+                                        View
                                     </button>
                                     <button
                                         onClick={() => removeFavorite(idx)}
