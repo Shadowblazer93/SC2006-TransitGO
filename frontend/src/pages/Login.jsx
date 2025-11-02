@@ -65,7 +65,7 @@ export default function Login() {
       }
 
       // Navigate to user page
-      navigate('/users');
+      navigate('/UserHomePage');
     }
   };
 
