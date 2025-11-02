@@ -35,6 +35,35 @@ export default function Login() {
       localStorage.setItem('access_token', data.session.access_token);
       console.log('Logged in. JWT:', data.session.access_token);
 
+      const user = data.user;
+      const uid = user.id;
+      const userEmail = user.email;
+
+      try {
+        const { data: rows, error: fetchError } = await supabase
+          .from('users')
+          .select('uid')
+          .eq('uid', uid)
+          .limit(1);
+
+        if (fetchError) throw fetchError;
+
+        if (!rows || rows.length === 0) {
+          const { error: insertError } = await supabase
+            .from('users')
+            .insert([{ uid, email: userEmail }]);
+
+          if (insertError) throw insertError;
+
+          console.log('Created users row for', uid);
+        } else {
+          console.log('Users row already exists for', uid);
+        }
+      } catch (err) {
+        console.error('Error syncing user row:', err);
+        setErrorMsg(err.message || 'Failed to sync user record');
+      }
+
       // Navigate to user page
       navigate('/users');
     }

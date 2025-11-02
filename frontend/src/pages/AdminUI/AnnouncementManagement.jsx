@@ -144,13 +144,13 @@ export default function AnnouncementManagement() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '12px',
-          background: '#333',
-          borderBottom: '3px solid #444',
+          background: '#ddd',
+          borderBottom: '3px solid #aaa',
           zIndex: 999,
           boxSizing: 'border-box',
         }}
       >
-        <h1 style={{ fontSize: 20, margin: 0 }}>Manage<br />Announcements</h1>
+        <h1 style={{ fontSize: 20, margin: 0 }}>Manage Announcements</h1>
         <button
           onClick={() => {
             setShowCreate((s) => !s)

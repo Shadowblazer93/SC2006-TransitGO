@@ -88,8 +88,8 @@ export default function AnnouncementView() {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '12px',
-          background: '#333',
-          borderBottom: '2px solid #444',
+          background: '#ddd',
+          borderBottom: '2px solid #aaa',
           zIndex: 999,
           boxSizing: 'border-box'
         }}
@@ -99,7 +99,7 @@ export default function AnnouncementView() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {announcements.map((a) => (
-          <div key={a.id} style={{ background: getRandomColor(), border: '1px solid #eee', borderRadius: 10, padding: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+          <div key={a.id} style={{ background: getRandomColor(), border: '1px solid #999', borderRadius: 10, padding: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
             {a.title && <div style={{ fontSize: 20, fontWeight: 700, color: '#111', marginBottom: 6 }}>{a.title}</div>}
             <div style={{ marginBottom: 8, whiteSpace: 'pre-wrap', color: '#111' }}>{a.message}</div>
 
