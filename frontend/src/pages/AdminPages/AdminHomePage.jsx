@@ -22,7 +22,7 @@ function AdminHomePage() {
       icon: userIcon,
       header: "User Accounts",
       desc: "Manage user access and privileges",
-      route: "/UserAccounts",
+      route: "/UserManagement",
     },
     {
       icon: metricsIcon,
@@ -38,9 +38,9 @@ function AdminHomePage() {
     },
     {
       icon: annoucementIcon,
-      header: "Annoucements",
+      header: "Announcements Management",
       desc: "Broadcast important updates to all users",
-      route: "/Annoucements",
+      route: "/AnnouncementManagement",
     },
   ];
 

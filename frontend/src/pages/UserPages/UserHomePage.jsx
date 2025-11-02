@@ -21,13 +21,13 @@ function UserHomePage() {
       icon: mapIcon,
       header: "Interactive Map",
       desc: "Explore routes, stations and services",
-      route: "/InteractiveMap",
+      route: "/Routing",
     },
     {
       icon: userIcon,
       header: "Platform Crowdedness",
       desc: "Check live platofrm crowd levels",
-      route: "/PlatformCrowdedness",
+      route: "/StationDensityRealTime",
     },
     {
       icon: trainIcon,

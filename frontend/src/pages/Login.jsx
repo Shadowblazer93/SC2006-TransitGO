@@ -58,6 +58,29 @@ export default function Login() {
           console.log('Created users row for', uid);
         } else {
           console.log('Users row already exists for', uid);
+          
+          // Check suspension/ban flags for existing user row
+          const { data: userRow, error: rowError } = await supabase
+            .from('users')
+            .select('is_suspended,is_banned')
+            .eq('uid', uid)
+            .single();
+
+          if (rowError) throw rowError;
+
+          if (userRow?.is_suspended) {
+            await supabase.auth.signOut();
+            localStorage.removeItem('access_token');
+            setErrorMsg('Your account has been suspended. Please contact support.');
+            return;
+          }
+
+          if (userRow?.is_banned) {
+            await supabase.auth.signOut();
+            localStorage.removeItem('access_token');
+            setErrorMsg('Your account has been banned.');
+            return;
+          }
         }
       } catch (err) {
         console.error('Error syncing user row:', err);

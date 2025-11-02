@@ -42,14 +42,14 @@ export default function UserManagement() {
   const openUser = (u) => setSelectedUser(u)
   const closeModal = () => setSelectedUser(null)
 
-  const patchUser = async (id, updates) => {
+  const patchUser = async (uid, updates) => {
     setActionLoading(true)
     setError(null)
     try {
-      const { data, error } = await supabase.from('users').update(updates).eq('id', id).select().single()
+      const { data, error } = await supabase.from('users').update(updates).eq('uid', uid).select().single()
       if (error) throw error
       // update local list
-      setUsers((cur) => cur.map((c) => (c.id === id ? data : c)))
+      setUsers((cur) => cur.map((c) => (c.uid === uid ? data : c)))
       setSelectedUser(data)
     } catch (err) {
       setError(err?.message ?? String(err))
@@ -97,32 +97,32 @@ export default function UserManagement() {
 
   const handleMakeAdmin = async (u) => {
     if (!u) return
-    await patchUser(u.id, { user_type: 'admin' })
+    await patchUser(u.uid, { user_type: 'admin' })
   }
 
   const handleSuspend = async (u) => {
     if (!u) return
     // toggle suspended flag if present; otherwise set suspended=true
     const next = u.is_suspended ? false : true
-    await patchUser(u.id, { is_suspended: next })
+    await patchUser(u.uid, { is_suspended: next })
   }
 
   const handleBan = async (u) => {
     if (!u) return
     const next = u.is_banned ? false : true
-    await patchUser(u.id, { is_banned: next })
+    await patchUser(u.uid, { is_banned: next })
   }
 
   const handleDelete = async (u) => {
     if (!u) return
-    const ok = confirm(`Delete user ${u.email ?? u.username ?? u.id}? This cannot be undone.`)
+    const ok = confirm(`Delete user ${u.email ?? u.username ?? u.uid}? This cannot be undone.`)
     if (!ok) return
     setActionLoading(true)
     setError(null)
     try {
-      const { error } = await supabase.from('users').delete().eq('id', u.id)
+      const { error } = await supabase.from('users').delete().eq('uid', u.uid)
       if (error) throw error
-      setUsers((cur) => cur.filter((c) => c.id !== u.id))
+      setUsers((cur) => cur.filter((c) => c.uid !== u.uid))
       closeModal()
     } catch (err) {
       setError(err?.message ?? String(err))
@@ -135,14 +135,14 @@ export default function UserManagement() {
   if (error) return <div style={{ padding: 16, color: 'red' }}>Error: {error}</div>
 
   return (
-    <div style={{ width: '100vw', padding: 12, paddingTop: 75, boxSizing: 'border-box', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial' }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: '#333', zIndex: 999 }}>
-        <h1 style={{ fontSize: 18, margin: 0, color: '#fff' }}>User Management</h1>
+    <div style={{ width: '100vw', padding: 12, paddingTop: 60, boxSizing: 'border-box', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: '#eee', zIndex: 999 }}>
+        <h1 style={{ fontSize: 18, margin: 0, color: '#000', fontWeight:500 }}>User Management</h1>
         <div style={{ width: 360, maxWidth: '60%' }}>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by name or email"
+            placeholder="Search by name/email"
             style={{ width: '50vw', padding: '8px 10px', borderRadius: 8, border: '2px solid #888' }}
           />
         </div>
@@ -156,7 +156,7 @@ export default function UserManagement() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8 }}>
               {admins.map((u) => (
-                <div key={u.id} onClick={() => openUser(u)} style={{ cursor: 'pointer', padding: 10, borderRadius: 8, background: '#aae4ffff', border: '1px solid #719faeff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={u.uid} onClick={() => openUser(u)} style={{ cursor: 'pointer', padding: 10, borderRadius: 8, background: '#aae4ffff', border: '1px solid #719faeff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: 700, color: '#000' }}>{u.username ?? '—'}</div>
                     <div style={{ fontSize: 13, color: '#666' }}>{u.email ?? '—'}</div>
@@ -175,7 +175,7 @@ export default function UserManagement() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8 }}>
               {regulars.map((u) => (
-                <div key={u.id} onClick={() => openUser(u)} style={{ cursor: 'pointer', padding: 10, borderRadius: 8, background: '#ffeecdff', border: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={u.uid} onClick={() => openUser(u)} style={{ cursor: 'pointer', padding: 10, borderRadius: 8, background: '#ffeecdff', border: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: 700, color: '#000' }}>{u.username ?? '—'}</div>
                     <div style={{ fontSize: 13, color: '#666' }}>{u.email ?? '—'}</div>
@@ -218,7 +218,7 @@ export default function UserManagement() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
               <div style={{ background: '#fafafa', padding: 10, borderRadius: 8 }}>
                 <div style={{ fontSize: 12, color: '#666' }}>User ID</div>
-                <div style={{ fontWeight: 700, color: '#444' }}>{selectedUser.id}</div>
+                <div style={{ fontWeight: 700, color: '#444' }}>{selectedUser.uid}</div>
               </div>
 
               <div style={{ background: '#fafafa', padding: 10, borderRadius: 8 }}>
