@@ -56,6 +56,7 @@ const NewAccount = () => {
           <div className="flex border-b border-gray-200">
             <button
               className="flex-1 py-3 text-center font-medium text-gray-400"
+              onClick={handleBack}
             >
               Login
             </button>
@@ -115,7 +116,7 @@ const NewAccount = () => {
             </button>
 
             <button
-              // onClick={handleBack}
+              onClick={handleBack}
               className="w-full text-blue-600 text-sm hover:underline"
             >
               Back to Login
