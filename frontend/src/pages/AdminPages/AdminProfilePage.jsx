@@ -149,13 +149,13 @@ function AdminProfilePage() {
         <a className="detailHeader" style={headerStyle}>
           Actions
         </a>
-        <a
+        {/* <a
           className="actionDesc"
           style={actionDescStyle}
           onClick={() => handleActionClick("/AdminHomePage")}
         >
           Create New Admin Account
-        </a>
+        </a> */}
         <a
           className="actionDesc"
           style={actionDescStyle}

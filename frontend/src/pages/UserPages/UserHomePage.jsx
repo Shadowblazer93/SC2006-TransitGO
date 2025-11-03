@@ -55,29 +55,35 @@ function UserHomePage() {
       route: "/Favourites",
     },
     {
-      icon: routeIcon,
-      header: "Saved Routes",
-      desc: "View planned routes",
-      route: "/SavedRoutes",
-    },
-    {
-      icon: downloadIcon,
-      header: "Downloaded Area",
-      desc: "Navigate offline using downloaded map regions",
-      route: "/DownloadedArea",
-    },
-    {
       icon: historyIcon,
-      header: "Trip History",
-      desc: "View latest trips and searches",
-      route: "/TripHistory",
+      header: "Announcements",
+      desc: "View app updates and announcements",
+      route: "/Announcements",
+    },
+    // {
+    //   icon: downloadIcon,
+    //   header: "Downloaded Area",
+    //   desc: "Navigate offline using downloaded map regions",
+    //   route: "/DownloadedArea",
+    // },
+    // {
+    //   icon: historyIcon,
+    //   header: "Trip History",
+    //   desc: "View latest trips and searches",
+    //   route: "/TripHistory",
+    // },
+    {
+      icon: feedbackIcon,
+      header: "Submit Feedback",
+      desc: "Submit a new feedback form",
+      route: "/UserFeedback",
     },
     {
       icon: feedbackIcon,
-      header: "Feedback",
-      desc: "Track past submission or share new feedback",
-      route: "/UserFeedback",
-    },
+      header: "View Past Feedback",
+      desc: "View all submitted feedback forms",
+      route: "/UserFeedbackSubmitted",
+    }
   ];
 
   return (

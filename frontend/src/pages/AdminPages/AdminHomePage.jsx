@@ -21,6 +21,13 @@ function AdminHomePage() {
 
   const features = [
     {
+      icon: heatmapIcon,
+      header: "User Home Page",
+      desc: "View the home page for non-admin users.",
+      route: "/UserHomePage",
+    }
+    ,
+    {
       icon: feedbackIcon,
       header: "User Feedback",
       desc: "Collect, review, and reply to user insights",
@@ -32,18 +39,18 @@ function AdminHomePage() {
       desc: "Manage user access and privileges",
       route: "/UserManagement",
     },
-    {
-      icon: metricsIcon,
-      header: "System Metrics",
-      desc: "Track performance and API up-time",
-      route: "/SystemMetrics",
-    },
-    {
-      icon: heatmapIcon,
-      header: "Issue Heatmaps",
-      desc: "Visualise high-impact problem zones",
-      route: "/IssueHeatmap",
-    },
+    // {
+    //   icon: metricsIcon,
+    //   header: "System Metrics",
+    //   desc: "Track performance and API up-time",
+    //   route: "/SystemMetrics",
+    // },
+    // {
+    //   icon: heatmapIcon,
+    //   header: "Issue Heatmaps",
+    //   desc: "Visualise high-impact problem zones",
+    //   route: "/IssueHeatmap",
+    // },
     {
       icon: annoucementIcon,
       header: "Announcements Management",
