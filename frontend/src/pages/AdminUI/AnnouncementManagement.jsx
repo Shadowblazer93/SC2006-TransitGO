@@ -80,11 +80,12 @@ export default function AnnouncementManagement() {
     setSaving(true)
     setError(null)
     try {
+      const sgLocal = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Singapore' }).replace(' ', 'T')
       const payload = {
         title: createTitle.trim(),
         message: createMessage.trim(),
         author: await getAuthorEmail(),
-        created_time: new Date().toISOString(),
+        created_time: `${sgLocal}+08:00`,
       }
       const { data, error } = await supabase.from('announcements').insert([payload]).select().single()
       if (error) throw error
@@ -120,11 +121,12 @@ export default function AnnouncementManagement() {
     setUpdating(true)
     setError(null)
     try {
+      const sgLocal = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Singapore' }).replace(' ', 'T')
       const updated = {
         title: editTitle.trim(),
         message: editMessage.trim(),
         author: await getAuthorEmail(),
-        created_time: new Date().toISOString(),
+        created_time: `${sgLocal}+08:00`,
       }
       const { data, error } = await supabase.from('announcements').update(updated).eq('id', id).select().single()
       if (error) throw error
