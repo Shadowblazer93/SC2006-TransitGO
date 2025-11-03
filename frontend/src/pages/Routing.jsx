@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { supabase } from "../supabaseClient";
+import { supabase, user_loggedin } from "../supabaseClient";
+import FooterNav from "../components/FooterNav";
 
 export default function Routing() {
     const mapRef = useRef(null);
@@ -658,6 +659,11 @@ export default function Routing() {
         }
     };
 
+    // authentication
+    const [perms, setPerms] = useState(true)
+    user_loggedin().then((res) => {if (!res) setPerms(false)})
+    if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
+
     return (
         <>
             <form onSubmit={handleSearchSubmit} style={{ marginTop: 5, display: "flex", alignItems: "center", gap: 6, flex: "0 0 480px" }}>
@@ -747,7 +753,7 @@ export default function Routing() {
 
             </div>
 
-            <div id="onemap" style={{ width: "100%", height: "78vh", borderRadius: 6, overflow: "hidden" }} />
+            <div id="onemap" style={{ width: "100%", height: "72vh", borderRadius: 6, overflow: "hidden" }} />
 
             {/* Routes modal (only render when generated) */}
             {showRoutesModal && routesData.length > 0 && (
@@ -890,6 +896,7 @@ export default function Routing() {
                     ))}
                 </div>
             )}
+            <FooterNav />
         </>
     );
 }

@@ -87,8 +87,27 @@ export default function Login() {
         setErrorMsg(err.message || 'Failed to sync user record');
       }
 
-      // Navigate to user page
-      navigate('/UserHomePage');
+      try {
+        const { data: typeData, error: typeError } = await supabase
+          .from('users')
+          .select('user_type')
+          .eq('uid', uid)
+          .single();
+
+        if (typeError) throw typeError;
+
+        const userType = typeData?.user_type;
+
+        if (userType === 'admin') {
+          navigate('/AdminHomePage');
+        } else {
+          navigate('/UserHomePage');
+        }
+      } catch (err) {
+        console.error('Error fetching user_type:', err);
+        // Fallback to regular user page on error
+        navigate('/UserHomePage');
+      }
     }
   };
 

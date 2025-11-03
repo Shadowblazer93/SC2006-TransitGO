@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "../../supabaseClient";
+import { supabase, user_loggedin } from "../../supabaseClient";
 import { deleteAccount } from "../../services/api";
+import FooterNav from "../../components/FooterNav";
 
 //Import Components
 import Top_Bar_Return from "../../components/Top_Bar_Return";
@@ -109,6 +110,11 @@ function UserProfilePage() {
 
   const navigate = useNavigate();
 
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
+
   const handleActionClick = (route) => {
     navigate(route);
   };
@@ -174,6 +180,7 @@ function UserProfilePage() {
           Delete Account
         </a>
       </div>
+      <FooterNav />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import FeedbackCard from "../../components/FeedbackCard.jsx";
+import { user_loggedin, user_isadmin } from "../../supabaseClient.js";
 import {
   getFeedbacks,
   deleteFeedback,
@@ -43,6 +44,12 @@ export default function FeedbackPage() {
       [f.title, f.description, f.type].filter(Boolean).some((x) => String(x).toLowerCase().includes(s))
     );
   }, [data, q]);
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  user_isadmin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   const onDelete = async (id) => {
     if (!confirm("Delete this feedback?")) return;

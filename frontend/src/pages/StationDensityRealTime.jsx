@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getStationCrowdDensityRealtime } from '../services/api'
+import { user_loggedin } from '../supabaseClient'
+import FooterNav from '../components/FooterNav'
 
 const LINES = ['CCL','CEL','CGL','DTL','EWL','NEL','NSL','BPL','SLRT','PLRT','TEL']
 const LineDesc = ['Circle Line','Circle Line Extension : Marina Bay','Changi Extension','Downtown Line','East West Line','North East Line','North South Line','Bukit Panjang LRT','Sengkang LRT',' Punggol LRT','Thomson-East Coast Line']
@@ -47,6 +49,11 @@ export default function StationDensityRealTime() {
 
     fetchAll()
   }, [])
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   const toggleLine = (line) => {
     setExpandedLine((cur) => (cur === line ? null : line))
@@ -218,6 +225,7 @@ export default function StationDensityRealTime() {
           <div style={{ padding: 12, color: '#666' }}>No lines match your search.</div>
         )}
       </div>
+      <FooterNav />
     </div>
   )
 }

@@ -23,6 +23,8 @@ import AdminProfilePage from "./pages/AdminPages/AdminProfilePage";
 //Import User Pages
 import UserHomePage from "./pages/UserPages/UserHomePage";
 import UserProfilePage from "./pages/UserPages/UserProfilePage";
+import UserFeedback from "./pages/UserUI/UserFeedback";
+import UserFeedbackSubmitted from "./pages/UserUI/UserFeedbackSubmitted";
 
 
 function App() {
@@ -45,14 +47,18 @@ function App() {
       {/* Main App Pages */}
       <Route path="/UserHomePage" element={<UserHomePage />} />
       <Route path="/UserProfile" element={<UserProfilePage />} />
-      <Route path="/users" element={<UserComponent />} />
       <Route path="/stationdensityrealtime" element={<StationDensityRealTime />} />
-      <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
       <Route path="/trainservicealerts" element={<TrainServiceAlerts />} />
       <Route path="/announcements" element={<Announcements />} />
       <Route path="/routing" element={<Routing />} />
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/farecalculator" element={<FareCalculator />} />
+      <Route path="/UserFeedback" element={<UserFeedback />} />
+      <Route path="/UserFeedbackSubmitted" element={<UserFeedbackSubmitted />} />
+
+      {/* not in use */}
+      <Route path="/users" element={<UserComponent />} />
+      <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
     </Routes>
   );
 }

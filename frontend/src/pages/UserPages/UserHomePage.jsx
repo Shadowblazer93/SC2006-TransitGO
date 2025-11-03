@@ -1,4 +1,6 @@
 //Import components
+import { user_loggedin } from "../../supabaseClient";
+import { useState } from "react";
 import Homepage_Button from "../../components/Homepage_Button";
 import Top_Bar from "../../components/Top_Bar";
 
@@ -16,6 +18,11 @@ import feedbackIcon from "../../assets/Admin/feedback.png";
 import userProfile from "../../assets/User/userProfile.png";
 
 function UserHomePage() {
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
+
   const features = [
     {
       icon: mapIcon,
@@ -48,29 +55,35 @@ function UserHomePage() {
       route: "/Favourites",
     },
     {
-      icon: routeIcon,
-      header: "Saved Routes",
-      desc: "View planned routes",
-      route: "/SavedRoutes",
-    },
-    {
-      icon: downloadIcon,
-      header: "Downloaded Area",
-      desc: "Navigate offline using downloaded map regions",
-      route: "/DownloadedArea",
-    },
-    {
       icon: historyIcon,
-      header: "Trip History",
-      desc: "View latest trips and searches",
-      route: "/TripHistory",
+      header: "Announcements",
+      desc: "View app updates and announcements",
+      route: "/Announcements",
+    },
+    // {
+    //   icon: downloadIcon,
+    //   header: "Downloaded Area",
+    //   desc: "Navigate offline using downloaded map regions",
+    //   route: "/DownloadedArea",
+    // },
+    // {
+    //   icon: historyIcon,
+    //   header: "Trip History",
+    //   desc: "View latest trips and searches",
+    //   route: "/TripHistory",
+    // },
+    {
+      icon: feedbackIcon,
+      header: "Submit Feedback",
+      desc: "Submit a new feedback form",
+      route: "/UserFeedback",
     },
     {
       icon: feedbackIcon,
-      header: "Feedback",
-      desc: "Track past submission or share new feedback",
-      route: "/Feedback",
-    },
+      header: "View Past Feedback",
+      desc: "View all submitted feedback forms",
+      route: "/UserFeedbackSubmitted",
+    }
   ];
 
   return (
