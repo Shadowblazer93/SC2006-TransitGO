@@ -22,13 +22,6 @@ function AdminHomePage() {
 
   const features = [
     {
-      icon: heatmapIcon,
-      header: "User Home Page",
-      desc: "View the home page for non-admin users.",
-      route: "/UserHomePage",
-    }
-    ,
-    {
       icon: feedbackIcon,
       header: "User Feedback",
       desc: "Collect, review, and reply to user insights",
@@ -58,6 +51,12 @@ function AdminHomePage() {
       desc: "Broadcast important updates to all users",
       route: "/AnnouncementManagement",
     },
+    {
+      icon: heatmapIcon,
+      header: "User Home Page",
+      desc: "View the home page for non-admin users.",
+      route: "/UserHomePage",
+    }
   ];
 
   return (
