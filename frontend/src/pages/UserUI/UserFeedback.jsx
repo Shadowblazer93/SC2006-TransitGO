@@ -6,7 +6,7 @@ import FooterNav from "../../components/FooterNav";
 export default function UserFeedback() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("general");
+  const [type, setType] = useState("suggestion");
   const [rating, setRating] = useState(0); // 0..5
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -65,7 +65,7 @@ export default function UserFeedback() {
       setOk("Feedback submitted. Thank you!");
       setTitle("");
       setDescription("");
-      setType("general");
+      setType("suggestion");
       setRating(0);
     } catch (err) {
       console.error("submit feedback error", err);
