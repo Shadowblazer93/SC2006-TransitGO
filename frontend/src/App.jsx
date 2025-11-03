@@ -12,6 +12,8 @@ import AnnouncementManagement from "./pages/AdminUI/AnnouncementManagement";
 import UserManagement from "./pages/AdminUI/UserManagement";
 import UserFeedbackList from "./pages/AdminUI/UserFeedbackList";
 import Routing from "./pages/Routing";
+import Favourites from "./pages/Favourites";
+import FareCalculator from "./pages/FareCalculator";
 import CreatePassword from "./pages/CreatePassword";
 
 //Import Admin Pages
@@ -49,6 +51,8 @@ function App() {
       <Route path="/trainservicealerts" element={<TrainServiceAlerts />} />
       <Route path="/announcements" element={<Announcements />} />
       <Route path="/routing" element={<Routing />} />
+      <Route path="/favourites" element={<Favourites />} />
+      <Route path="/farecalculator" element={<FareCalculator />} />
     </Routes>
   );
 }

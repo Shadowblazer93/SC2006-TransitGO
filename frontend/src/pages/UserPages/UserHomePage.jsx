@@ -44,7 +44,7 @@ function UserHomePage() {
     {
       icon: favouriteIcon,
       header: "Favourites",
-      desc: "View saved services and lcoations",
+      desc: "View saved services and locations",
       route: "/Favourites",
     },
     {

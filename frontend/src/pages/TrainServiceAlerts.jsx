@@ -97,7 +97,7 @@ export default function TrainServiceAlerts() {
           marginBottom: 10,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           padding: '12px',
           background: '#eee',
           borderBottom: '3px solid #ddd',
