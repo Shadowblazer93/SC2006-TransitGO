@@ -24,6 +24,7 @@ import AdminProfilePage from "./pages/AdminPages/AdminProfilePage";
 import UserHomePage from "./pages/UserPages/UserHomePage";
 import UserProfilePage from "./pages/UserPages/UserProfilePage";
 import UserFeedback from "./pages/UserUI/UserFeedback";
+import UserFeedbackSubmitted from "./pages/UserUI/UserFeedbackSubmitted";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/farecalculator" element={<FareCalculator />} />
       <Route path="/UserFeedback" element={<UserFeedback />} />
+      <Route path="/UserFeedbackSubmitted" element={<UserFeedbackSubmitted />} />
 
       {/* not in use */}
       <Route path="/users" element={<UserComponent />} />
