@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase, user_loggedin } from "../supabaseClient";
+import FooterNav from "../components/FooterNav";
 
 export default function Routing() {
     const mapRef = useRef(null);
@@ -752,7 +753,7 @@ export default function Routing() {
 
             </div>
 
-            <div id="onemap" style={{ width: "100%", height: "78vh", borderRadius: 6, overflow: "hidden" }} />
+            <div id="onemap" style={{ width: "100%", height: "72vh", borderRadius: 6, overflow: "hidden" }} />
 
             {/* Routes modal (only render when generated) */}
             {showRoutesModal && routesData.length > 0 && (
@@ -895,6 +896,7 @@ export default function Routing() {
                     ))}
                 </div>
             )}
+            <FooterNav />
         </>
     );
 }

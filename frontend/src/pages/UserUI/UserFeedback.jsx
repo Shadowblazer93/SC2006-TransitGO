@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // Adjust this import if your supabase client is in a different path
 import { supabase, user_loggedin } from "../../supabaseClient";
+import FooterNav from "../../components/FooterNav";
 
 export default function UserFeedback() {
   const [title, setTitle] = useState("");
@@ -86,13 +87,13 @@ export default function UserFeedback() {
         <p className="text-sm text-neutral-600">We appreciate your feedback!<br/>Tell us what you think.</p>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-4 rounded-lg bg-white p-6 shadow">
+      <form onSubmit={onSubmit} className="space-y-2 rounded-lg bg-white p-6 shadow">
         <div>
           <label className="block text-sm font-medium mb-1">Title</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded border px-3 py-2"
+            className="w-full rounded border px-3 py-1"
             placeholder="Short title"
           />
         </div>
@@ -103,7 +104,7 @@ export default function UserFeedback() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={6}
-            className="w-full rounded border px-3 py-2"
+            className="w-full rounded border px-3 py-1"
             placeholder="Describe the problem, suggestion or experience..."
           />
         </div>
@@ -119,8 +120,8 @@ export default function UserFeedback() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Rating</label>
-            <div className="flex items-center gap-2">
+            <label className="block text-sm font-medium mb-1 py-2">Rating</label>
+            <div className="flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
                   key={n}
@@ -153,6 +154,7 @@ export default function UserFeedback() {
           </div>
         </div>
       </form>
+      <FooterNav />
     </div>
   );
 }

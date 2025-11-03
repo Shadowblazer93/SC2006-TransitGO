@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase, user_loggedin } from "../../supabaseClient";
 import { deleteAccount } from "../../services/api";
+import FooterNav from "../../components/FooterNav";
 
 //Import Components
 import Top_Bar_Return from "../../components/Top_Bar_Return";
@@ -179,6 +180,7 @@ function UserProfilePage() {
           Delete Account
         </a>
       </div>
+      <FooterNav />
     </div>
   );
 }

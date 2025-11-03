@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getStationCrowdDensityRealtime } from '../services/api'
 import { user_loggedin } from '../supabaseClient'
+import FooterNav from '../components/FooterNav'
 
 const LINES = ['CCL','CEL','CGL','DTL','EWL','NEL','NSL','BPL','SLRT','PLRT','TEL']
 const LineDesc = ['Circle Line','Circle Line Extension : Marina Bay','Changi Extension','Downtown Line','East West Line','North East Line','North South Line','Bukit Panjang LRT','Sengkang LRT',' Punggol LRT','Thomson-East Coast Line']
@@ -224,6 +225,7 @@ export default function StationDensityRealTime() {
           <div style={{ padding: 12, color: '#666' }}>No lines match your search.</div>
         )}
       </div>
+      <FooterNav />
     </div>
   )
 }

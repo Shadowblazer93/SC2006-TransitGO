@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase, user_loggedin, user_isadmin } from "../../supabaseClient";
+import AdminFooterNav from "../../components/AdminFooterNav"; "../../components/AdminFooterNavFooterNav";
 
 //Import Components
 import Top_Bar_Return from "../../components/Top_Bar_Return";
@@ -177,6 +178,7 @@ function AdminProfilePage() {
           Delete Account
         </a>
       </div>
+      <AdminFooterNav />
     </div>
   );
 }

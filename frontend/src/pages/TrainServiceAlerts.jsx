@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { trainServiceAlerts } from '../services/api'
 import { user_loggedin } from '../supabaseClient'
+import FooterNav from '../components/FooterNav'
 
 export default function TrainServiceAlerts() {
   const [alerts, setAlerts] = useState([])
@@ -186,6 +187,7 @@ export default function TrainServiceAlerts() {
           )
         })}
       </div>
+      <FooterNav />
     </div>
   )
 }

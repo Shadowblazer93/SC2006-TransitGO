@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { supabase, user_loggedin, user_isadmin } from '../../supabaseClient'
+import AdminFooterNav from '../../components/AdminFooterNav'
 
 export default function AnnouncementManagement() {
   const [announcements, setAnnouncements] = useState([])
@@ -306,6 +307,7 @@ export default function AnnouncementManagement() {
           ))}
         </div>
       )}
+      <AdminFooterNav />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { supabase, user_loggedin, user_isadmin } from '../../supabaseClient'
+import AdminFooterNav from '../../components/AdminFooterNav'
 
 export default function UserManagement() {
   const [users, setUsers] = useState([])
@@ -282,6 +283,7 @@ export default function UserManagement() {
           </div>
         </div>
       )}
+      <AdminFooterNav />
     </div>
   )
 }

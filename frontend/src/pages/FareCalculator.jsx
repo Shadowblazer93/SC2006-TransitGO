@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { user_loggedin } from "../supabaseClient";
+import FooterNav from "../components/FooterNav";
 
 export default function FareCalculator() {
   const [originQuery, setOriginQuery] = useState("");
@@ -232,7 +233,7 @@ export default function FareCalculator() {
           <button
             onClick={computeRoute}
             disabled={routing || !origin || !dest}
-            style={{ padding: "10px 16px", background: routing ? "#ccc" : "#1976d2", color: "#fff", border: "none", borderRadius: 6, fontWeight: 700, cursor: "pointer" }}
+            style={{ padding: "5px 16px", background: routing ? "#ccc" : "#1976d2", color: "#fff", border: "none", borderRadius: 6, fontWeight: 500, cursor: "pointer" }}
           >
             {routing ? "Calculating..." : "Get Fare"}
           </button>
@@ -284,6 +285,7 @@ export default function FareCalculator() {
           </div>
         )}
       </div>
+      <FooterNav />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { supabase, user_loggedin } from '../../supabaseClient'
+import FooterNav from '../../components/FooterNav'
 
 export default function AnnouncementView() {
   const [announcements, setAnnouncements] = useState([])
@@ -115,6 +116,7 @@ export default function AnnouncementView() {
           </div>
         ))}
       </div>
+      <FooterNav />
     </div>
   )
 }
