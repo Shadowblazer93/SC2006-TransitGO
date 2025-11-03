@@ -3,6 +3,7 @@ import { user_loggedin } from "../../supabaseClient";
 import { useState } from "react";
 import Homepage_Button from "../../components/Homepage_Button";
 import Top_Bar from "../../components/Top_Bar";
+import FooterNav from "../../components/FooterNav";
 
 //Import image assets
 import mapIcon from "../../assets/Admin/issueHeatmap.png";
@@ -102,6 +103,7 @@ function UserHomePage() {
           route={feature.route}
         />
       ))}
+      <FooterNav />
     </div>
   );
 }

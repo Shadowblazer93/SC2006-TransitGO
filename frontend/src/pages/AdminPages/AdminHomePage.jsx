@@ -2,6 +2,7 @@
 import Homepage_Button from "../../components/Homepage_Button";
 import Top_Bar from "../../components/Top_Bar";
 import { user_loggedin, user_isadmin } from "../../supabaseClient";
+import AdminFooterNav from "../../components/AdminFooterNav";
 import { useState } from "react";
 
 //Import image assets
@@ -75,6 +76,7 @@ function AdminHomePage() {
           route={feature.route}
         />
       ))}
+      <AdminFooterNav />
     </div>
   );
 }
