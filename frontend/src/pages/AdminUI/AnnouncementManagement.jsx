@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../supabaseClient'
 
+// TODO
+// add check to see if logged in user is admin
+// automatically change author to logged in user email (currently placeholder)
+
+const AUTHOR_PLACEHOLDER = 'tempEmail'
+
 export default function AnnouncementManagement() {
   const [announcements, setAnnouncements] = useState([])
   const [loading, setLoading] = useState(true)
@@ -19,24 +25,6 @@ export default function AnnouncementManagement() {
   useEffect(() => {
     fetchAnnouncements()
   }, [])
-
-  async function getAuthorEmail() {
-    const { data: { session } = {}, error: sessionError } = await supabase.auth.getSession()
-    if (sessionError) return 'Unknown'
-    const email = session?.user?.email
-    if (email) return email
-
-    // fallback: try to fetch from users table (adjust PK column name if different)
-    const uid = session?.user?.id
-    if (!uid) return 'Unknown'
-    const { data, error } = await supabase
-      .from('users')
-      .select('email, username')
-      .eq('id', uid)
-      .maybeSingle()
-    if (error || !data) return 'Unknown'
-    return data.email ?? data.username ?? 'Unknown'
-  }
 
   const fetchAnnouncements = async () => {
     setLoading(true)
@@ -76,7 +64,7 @@ export default function AnnouncementManagement() {
       const payload = {
         title: createTitle.trim(),
         message: createMessage.trim(),
-        author: await getAuthorEmail(),
+        author: AUTHOR_PLACEHOLDER,
         created_time: new Date().toISOString(),
       }
       const { data, error } = await supabase.from('announcements').insert([payload]).select().single()
@@ -116,7 +104,7 @@ export default function AnnouncementManagement() {
       const updated = {
         title: editTitle.trim(),
         message: editMessage.trim(),
-        author: await getAuthorEmail(),
+        author: AUTHOR_PLACEHOLDER,
         created_time: new Date().toISOString(),
       }
       const { data, error } = await supabase.from('announcements').update(updated).eq('id', id).select().single()
@@ -156,14 +144,13 @@ export default function AnnouncementManagement() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '12px',
-          background: '#eee',
-          borderBottom: '3px solid #ddd',
-          borderRadius: 20,
+          background: '#ddd',
+          borderBottom: '3px solid #aaa',
           zIndex: 999,
           boxSizing: 'border-box',
         }}
       >
-        <h1 style={{ fontSize: 20, margin: 0, fontWeight: 600 }}>Manage Announcements</h1>
+        <h1 style={{ fontSize: 20, margin: 0 }}>Manage Announcements</h1>
         <button
           onClick={() => {
             setShowCreate((s) => !s)

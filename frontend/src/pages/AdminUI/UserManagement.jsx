@@ -136,8 +136,8 @@ export default function UserManagement() {
 
   return (
     <div style={{ width: '100vw', padding: 12, paddingTop: 60, boxSizing: 'border-box', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial' }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', background: '#ddd', zIndex: 999 }}>
-        <h1 style={{ fontSize: 18, margin: 0, color: '#000', fontWeight:600 }}>Manage Users</h1>
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: '#eee', zIndex: 999 }}>
+        <h1 style={{ fontSize: 18, margin: 0, color: '#000', fontWeight:500 }}>User Management</h1>
         <div style={{ width: 360, maxWidth: '60%' }}>
           <input
             value={query}

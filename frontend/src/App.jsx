@@ -1,63 +1,82 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import ResetPassword from "./pages/ResetPassword";
-import CreateAccount from "./pages/CreateAccount";
-import StationDensityRealTime from "./pages/StationDensityRealTime";
-import StationDensityForecast from "./pages/StationDensityForecast";
-import TrainServiceAlerts from "./pages/TrainServiceAlerts";
-import UserComponent from "./components/UserComponent";
-import Announcements from "./pages/UserUI/Announcements";
-import AnnouncementManagement from "./pages/AdminUI/AnnouncementManagement";
-import UserManagement from "./pages/AdminUI/UserManagement";
-import UserFeedbackList from "./pages/AdminUI/UserFeedbackList";
-import Routing from "./pages/Routing";
-import Favourites from "./pages/Favourites";
-import FareCalculator from "./pages/FareCalculator";
-import CreatePassword from "./pages/CreatePassword";
+// src/App.jsx
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-//Import Admin Pages
-import AdminHomePage from "./pages/AdminPages/AdminHomePage";
-import AdminProfilePage from "./pages/AdminPages/AdminProfilePage";
+import './styles/theme.css';
 
-//Import User Pages
-import UserHomePage from "./pages/UserPages/UserHomePage";
-import UserProfilePage from "./pages/UserPages/UserProfilePage";
-import UserFeedback from "./pages/UserUI/UserFeedback";
+// Auth & layout
+import { AuthProvider } from './auth/AuthProvider.jsx';
+import ProtectedRoute from './auth/ProtectedRoute.jsx';
+import AppShell from './components/AppShell.jsx';
 
+// Pages
+import Login from './pages/Login.jsx';
+import UserHomePage from './pages/UserHomePage.jsx';
+import FareCalculator from './pages/UserPages/FareCalculator.jsx';
+import Favourites from './pages/UserPages/Favourites.jsx';
+import SavedRoutes from './pages/UserPages/SavedRoutes.jsx';
+import DownloadedArea from './pages/UserPages/DownloadedArea.jsx';
+import TripHistory from './pages/UserPages/TripHistory.jsx';
+import UserFeedback from './pages/UserPages/UserFeedback.jsx';
+import Map from './pages/UserPages/Map.jsx';
+import PlatformCrowdness from './pages/UserPages/PlatformCrowdness.jsx';
+import MRTServices from './pages/UserPages/MRTServices.jsx';
+import UserProfile from './pages/UserPages/UserProfile.jsx';
+import FontSize from './pages/UserPages/FontSize.jsx';
 
-function App() {
+// Auto-register any other pages under src/pages/**
+import { getDynamicAutoRoutes } from './router/DynamicAutoRoutes.jsx';
+
+export default function App() {
   return (
-    <Routes>
-      {/* Auth Pages */}
-      <Route path="/" element={<Login />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ResetPassword />} />
-      <Route path="/reset-password" element={<CreatePassword />} />
-      <Route path="/signup" element={<CreateAccount />} />
+    <AuthProvider>
+      <Routes>
+        {/* Public route */}
+        <Route path="/login" element={<Login />} />
 
-      {/* Admin Pages */}
-      <Route path="/AdminHomePage" element={<AdminHomePage />} />
-      <Route path="/AdminProfile" element={<AdminProfilePage />} />
-      <Route path="/announcementmanagement" element={<AnnouncementManagement />} />
-      <Route path="/usermanagement" element={<UserManagement />} />
-      <Route path="/Feedback" element={<UserFeedbackList />} />
+        {/* Protected layout (header + footer) */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppShell />
+            </ProtectedRoute>
+            
+          }
+        >
+          {/* Home */}
+          <Route index element={<UserHomePage />} />
+          <Route path="/" element={<UserHomePage />} />
 
-      {/* Main App Pages */}
-      <Route path="/UserHomePage" element={<UserHomePage />} />
-      <Route path="/UserProfile" element={<UserProfilePage />} />
-      <Route path="/users" element={<UserComponent />} />
-      <Route path="/stationdensityrealtime" element={<StationDensityRealTime />} />
-      <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
-      <Route path="/trainservicealerts" element={<TrainServiceAlerts />} />
-      <Route path="/announcements" element={<Announcements />} />
-      <Route path="/routing" element={<Routing />} />
-      <Route path="/favourites" element={<Favourites />} />
-      <Route path="/farecalculator" element={<FareCalculator />} />
-      <Route path="/UserFeedback" element={<UserFeedback />} />
-    </Routes>
+          {/* Main features */}
+          <Route path="/map" element={<Map />} />
+          <Route path="/crowdness" element={<PlatformCrowdness />} />
+          <Route path="/services" element={<MRTServices />} />
+          <Route path="/farecalculator" element={<FareCalculator />} />
+          <Route path="/favourites" element={<Favourites />} />
+          <Route path="/savedroutes" element={<SavedRoutes />} />
+          <Route path="/downloadedarea" element={<DownloadedArea />} />
+          <Route path="/triphistory" element={<TripHistory />} />
+          <Route path="/userfeedback" element={<UserFeedback />} />
+
+          {/* Legacy aliases (capitalised) */}
+          <Route path="/FareCalculator" element={<FareCalculator />} />
+          <Route path="/Favourites" element={<Favourites />} />
+          <Route path="/SavedRoutes" element={<SavedRoutes />} />
+          <Route path="/DownloadedArea" element={<DownloadedArea />} />
+          <Route path="/TripHistory" element={<TripHistory />} />
+          <Route path="/UserFeedback" element={<UserFeedback />} />
+          <Route path="/profile" element={<UserProfile />} />
+          n<Route path="/font-size" element={<FontSize />} />
+          
+
+
+          {/* Auto routes for anything else in src/pages/** */}
+          {getDynamicAutoRoutes()}       
+          </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthProvider>
   );
 }
-
-export default App;
-

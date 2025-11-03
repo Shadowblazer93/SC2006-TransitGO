@@ -1,177 +1,169 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
+import React, { useEffect, useState } from 'react';
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../auth/AuthProvider';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
-
-
-console.log("URL:", SUPABASE_URL); 
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const Mode = { SignIn: 'signin', SignUp: 'signup', Reset: 'reset', Magic: 'magic' };
 
 export default function Login() {
+  const { session, initialising } = useAuth();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const from = params.get('from') || '/';
+
+  const [mode, setMode] = useState(Mode.SignIn);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-  const navigate = useNavigate();
+  const [password2, setPassword2] = useState('');
 
-  const handleForgotPassword = () => {
-    navigate("/forgot-password");
-  };
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setErrorMsg(error.message);
-    } else {
-      // Save JWT for API calls
-      localStorage.setItem('access_token', data.session.access_token);
-      console.log('Logged in. JWT:', data.session.access_token);
-
-      const user = data.user;
-      const uid = user.id;
-      const userEmail = user.email;
-
-      try {
-        const { data: rows, error: fetchError } = await supabase
-          .from('users')
-          .select('uid')
-          .eq('uid', uid)
-          .limit(1);
-
-        if (fetchError) throw fetchError;
-
-        if (!rows || rows.length === 0) {
-          const { error: insertError } = await supabase
-            .from('users')
-            .insert([{ uid, email: userEmail }]);
-
-          if (insertError) throw insertError;
-
-          console.log('Created users row for', uid);
-        } else {
-          console.log('Users row already exists for', uid);
-          
-          // Check suspension/ban flags for existing user row
-          const { data: userRow, error: rowError } = await supabase
-            .from('users')
-            .select('is_suspended,is_banned')
-            .eq('uid', uid)
-            .single();
-
-          if (rowError) throw rowError;
-
-          if (userRow?.is_suspended) {
-            await supabase.auth.signOut();
-            localStorage.removeItem('access_token');
-            setErrorMsg('Your account has been suspended. Please contact support.');
-            return;
-          }
-
-          if (userRow?.is_banned) {
-            await supabase.auth.signOut();
-            localStorage.removeItem('access_token');
-            setErrorMsg('Your account has been banned.');
-            return;
-          }
-        }
-      } catch (err) {
-        console.error('Error syncing user row:', err);
-        setErrorMsg(err.message || 'Failed to sync user record');
-      }
-
-      // Navigate to user page
-      navigate('/UserHomePage');
+  // If we already have a session (after magic link/OAuth), go to the target once
+  useEffect(() => {
+    if (!initialising && session) {
+      navigate(from, { replace: true });
     }
+  }, [initialising, session, from, navigate]);
+
+  const clear = () => { setStatus(''); setError(''); };
+
+  const handleSignIn = async (e) => {
+    e.preventDefault(); clear(); setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) return setError(error.message);
+    navigate(from, { replace: true });
   };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault(); clear();
+    if (password.length < 6) return setError('Password must be at least 6 characters.');
+    if (password !== password2) return setError('Passwords do not match.');
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email, password,
+      options: { emailRedirectTo: window.location.origin + '/login?from=' + encodeURIComponent(from) },
+    });
+    setLoading(false);
+    if (error) return setError(error.message);
+    setStatus('Check your email to confirm your account.');
+  };
+
+  const handleReset = async (e) => {
+    e.preventDefault(); clear(); setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/login?from=' + encodeURIComponent(from),
+    });
+    setLoading(false);
+    if (error) return setError(error.message);
+    setStatus('Password reset email sent.');
+  };
+
+  const handleMagic = async (e) => {
+    e.preventDefault(); clear(); setLoading(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin + '/login?from=' + encodeURIComponent(from) },
+    });
+    setLoading(false);
+    if (error) return setError(error.message);
+    setStatus('Magic link sent. Check your inbox.');
+  };
+
+  const handleGoogle = async () => {
+    clear(); setLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/login?from=' + encodeURIComponent(from) },
+    });
+    setLoading(false);
+    if (error) return setError(error.message);
+  };
+
+  const box = { maxWidth: 460, margin: '48px auto', padding: 24, borderRadius: 12, border: '1px solid #e5e7eb' };
+  const row = { display: 'grid', gap: 8, marginBottom: 14 };
+  const input = { padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', width: '100%' };
+  const btn = { padding: '10px 14px', borderRadius: 8, border: '1px solid #111827', background: '#111827', color: '#fff', cursor: 'pointer' };
+  const btnGhost = { padding: '10px 14px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' };
+  const tabs = { display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' };
+  const tab = (active) => ({ padding: '8px 12px', borderRadius: 999, border: '1px solid ' + (active ? '#111827' : '#d1d5db'),
+    background: active ? '#111827' : '#fff', color: active ? '#fff' : 'inherit', cursor: 'pointer' });
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Phone Frame */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden" style={{ maxWidth: '400px', margin: '0 auto' }}>
-          {/* Logo */}
-          <div className="flex items-center justify-center py-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold">TransitGo</span>
-            </div>
-          </div>
+    <div style={box}>
+      <h1 style={{ margin: 0, marginBottom: 6 }}>Login</h1>
+      <p style={{ marginTop: 0, color: '#6b7280' }}>Sign in to TransitGO</p>
 
-          {/* Tab Switcher */}
-          <div className="flex border-b border-gray-200">
-            <button
-              className="flex-1 py-3 text-center font-medium text-black border-b-2 border-black"
-            >
-              Login
-            </button>
-            <button
-              className="flex-1 py-3 text-center font-medium text-gray-400"
-              onClick={() => navigate('/signup')}
-            >
-            Sign Up
-            </button>
-          </div>
-
-          {/* Form */}
-          <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Username/Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {errorMsg && (
-              <p className="text-red-600 text-sm">{errorMsg}</p>
-            )}
-
-            <button
-              onClick={handleLogin}
-              className="w-full bg-blue-600 text-white py-2.5 rounded-md font-medium hover:bg-blue-700 transition-colors"
-            >
-              Login
-            </button>
-
-            <button
-              onClick={handleForgotPassword}
-              className="w-full text-blue-600 text-sm hover:underline"
-            >
-              Forgot your password?
-            </button>
-          </div>
-
-          {/* Home Indicator */}
-          <div className="pb-2 flex justify-center">
-            <div className="w-32 h-1 bg-black rounded-full"></div>
-          </div>
-        </div>
+      <div style={tabs}>
+        <button style={tab(mode === Mode.SignIn)} onClick={() => setMode(Mode.SignIn)}>Email / Password</button>
+        <button style={tab(mode === Mode.SignUp)} onClick={() => setMode(Mode.SignUp)}>Create Account</button>
+        <button style={tab(mode === Mode.Magic)} onClick={() => setMode(Mode.Magic)}>Magic Link</button>
+        <button style={tab(mode === Mode.Reset)} onClick={() => setMode(Mode.Reset)}>Reset Password</button>
       </div>
+
+      {mode === Mode.SignIn && (
+        <form onSubmit={handleSignIn}>
+          <div style={row}>
+            <label htmlFor="email">Email</label>
+            <input id="email" type="email" style={input} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <div style={row}>
+            <label htmlFor="password">Password</label>
+            <input id="password" type="password" style={input} value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="submit" style={btn} disabled={loading}>{loading ? 'Signing in…' : 'Sign In'}</button>
+            <button type="button" style={btnGhost} onClick={handleGoogle} disabled={loading}>Continue with Google</button>
+          </div>
+        </form>
+      )}
+
+      {mode === Mode.SignUp && (
+        <form onSubmit={handleSignUp}>
+          <div style={row}>
+            <label htmlFor="email2">Email</label>
+            <input id="email2" type="email" style={input} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <div style={row}>
+            <label htmlFor="password2">Password</label>
+            <input id="password2" type="password" style={input} value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
+          <div style={row}>
+            <label htmlFor="password3">Confirm Password</label>
+            <input id="password3" type="password" style={input} value={password2} onChange={(e) => setPassword2(e.target.value)} required />
+          </div>
+          <button type="submit" style={btn} disabled={loading}>{loading ? 'Creating…' : 'Create Account'}</button>
+        </form>
+      )}
+
+      {mode === Mode.Magic && (
+        <form onSubmit={handleMagic}>
+          <div style={row}>
+            <label htmlFor="email3">Email</label>
+            <input id="email3" type="email" style={input} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <button type="submit" style={btn} disabled={loading}>{loading ? 'Sending…' : 'Send Magic Link'}</button>
+        </form>
+      )}
+
+      {mode === Mode.Reset && (
+        <form onSubmit={handleReset}>
+          <div style={row}>
+            <label htmlFor="email4">Email</label>
+            <input id="email4" type="email" style={input} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <button type="submit" style={btn} disabled={loading}>{loading ? 'Sending…' : 'Send Reset Email'}</button>
+        </form>
+      )}
+
+      {(status || error) && (
+        <div style={{ marginTop: 16 }}>
+          {status && <div style={{ color: '#065f46' }}>{status}</div>}
+          {error && <div style={{ color: '#991b1b' }}>{error}</div>}
+        </div>
+      )}
     </div>
   );
 }
