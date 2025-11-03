@@ -212,13 +212,13 @@ export async function deleteAccount() {
     // handle 200/204 or empty body
     if (res.status === 200 || res.status === 204) {
       await supabase.auth.signOut({ scope: "global" });
-      window.location.assign("/login"); // or /login
+      window.location.assign("/login");
       return;
     }
     // fallback if some other 2xx with body
     console.log("Delete response:", res.data);
     await supabase.auth.signOut({ scope: "global" });
-    window.location.assign("/goodbye");
+    window.location.assign("/login");
   } catch (err) {
     console.error("Delete failed:", err);
     const msg = err?.response?.data?.detail || err?.message || "Failed to delete account.";

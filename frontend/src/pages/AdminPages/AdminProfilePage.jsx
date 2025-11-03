@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase, user_loggedin, user_isadmin } from "../../supabaseClient";
+import { deleteAccount } from "../../services/api";
 import AdminFooterNav from "../../components/AdminFooterNav"; "../../components/AdminFooterNavFooterNav";
 
 //Import Components
@@ -112,6 +113,15 @@ function AdminProfilePage() {
   const handleActionClick = (route) => {
     navigate(route);
   };
+  async function logout() {
+    const { error } = await supabase.auth.signOut(); 
+    if (error) console.error(error);
+    else navigate("/Login");
+}
+
+async function changePW() {
+  navigate("/reset-password");
+}
 
     // authentication
   const [perms, setPerms] = useState(true)
@@ -159,21 +169,21 @@ function AdminProfilePage() {
         <a
           className="actionDesc"
           style={actionDescStyle}
-          onClick={() => handleActionClick("/AdminHomePage")}
+          onClick={changePW}
         >
           Change Password
         </a>
         <a
           className="actionDesc"
           style={actionDescStyle}
-          onClick={() => handleActionClick("/Login")}
+          onClick={logout}
         >
           Logout
         </a>
         <a
           className="actionDesc"
           style={actionDescStyle}
-          onClick={() => handleActionClick("/AdminHomePage")}
+          onClick={deleteAccount}
         >
           Delete Account
         </a>
