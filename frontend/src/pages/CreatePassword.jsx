@@ -129,7 +129,7 @@ export default function ResetPassword() {
               <p className="text-sm text-red-600">
                 {err || "Invalid or expired link. Please request a new reset link."}
               </p>
-              <a href="/forgot" className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-500">
+              <a href="/forgot-password" className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-500">
                 Request a new reset link
               </a>
             </div>
