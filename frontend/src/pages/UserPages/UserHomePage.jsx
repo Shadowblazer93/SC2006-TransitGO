@@ -33,7 +33,7 @@ function UserHomePage() {
       icon: trainIcon,
       header: "MRT Services Availability",
       desc: "Check MRT stations' live status",
-      route: "/MrtServiceAvailability",
+      route: "/TrainServiceAlerts",
     },
     {
       icon: calculatorIcon,
@@ -69,7 +69,7 @@ function UserHomePage() {
       icon: feedbackIcon,
       header: "Feedback",
       desc: "Track past submission or share new feedback",
-      route: "/UserFeedback",
+      route: "/Feedback",
     },
   ];
 

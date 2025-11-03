@@ -88,9 +88,24 @@ export default function TrainServiceAlerts() {
   if (!alerts.length) return <div style={{ padding: 16 }}>No current disruptions.</div>
 
   return (
-    <div style={{ padding: 12, boxSizing: 'border-box', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial' }}>
-      <div style={{top: 0, zIndex: 20, marginBottom: 5, background:'#222', padding: '12px 10px' }}>
-        <h1 style={{ fontSize: 20, margin: '0 0 0px 0', textAlign: 'center' }}>Train Service Disruptions</h1>
+    <div style={{ boxSizing: 'border-box', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial' }}>
+      <div style={{
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 64,
+          marginBottom: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '12px',
+          background: '#eee',
+          borderBottom: '3px solid #ddd',
+          borderRadius: 20,
+          zIndex: 999,
+          boxSizing: 'border-box'
+          }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 0px 0', textAlign: 'center' }}>Train Service Disruptions</h1>
       </div>
 
       <div
@@ -121,9 +136,8 @@ export default function TrainServiceAlerts() {
             <div
               key={idx}
               style={{
-                minWidth: 280,
-                maxWidth: 500,
-                width: '87vw',
+                width: '95vw',
+                marginLeft: '2.5vw',
                 background: statusColor(status),
                 border: `1px solid black`,
                 borderRadius: 12,

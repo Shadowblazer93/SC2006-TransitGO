@@ -101,9 +101,9 @@ export default function StationDensityRealTime() {
       boxSizing: 'border-box'
     }}>
       {/* sticky header */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 20, marginBottom: 20, background:'#fff', padding: '12px 10px' }}>
-        <h1 style={{ fontSize: 20, marginBottom: 8, color: '#000', fontWeight:700 }}>Real-time Station Density</h1>
-        <p style={{ marginTop: 0, marginBottom: 12, color: '#aaa' }}>Tap a line to view its stations.</p>
+      <div style={{position: 'sticky', padding: 5, top: 0, zIndex: 20, marginBottom: 20, background:'#eee', borderBottom: '3px solid #aaa', borderRadius: 5 }}>
+        <h1 style={{ fontSize: 20, marginBottom: 4, color: '#000', fontWeight:600 }}>Real-time Station Density</h1>
+        <p style={{ marginTop: 0, marginBottom: 4, color: '#555' }}>Tap a line to view its stations.</p>
 
       {/* search bar */}
       <div style={{ marginBottom: 12 }}>
