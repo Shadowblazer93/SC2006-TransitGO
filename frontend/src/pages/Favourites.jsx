@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase, user_loggedin } from "../supabaseClient";
+import FooterNav from "../components/FooterNav";
 
 export default function Favourites() {
   const [favorites, setFavorites] = useState([]);
@@ -154,6 +155,7 @@ export default function Favourites() {
           ))}
         </div>
       )}
+      <FooterNav />
     </div>
   );
 }
