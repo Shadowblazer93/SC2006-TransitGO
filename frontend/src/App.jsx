@@ -23,6 +23,7 @@ import AdminProfilePage from "./pages/AdminPages/AdminProfilePage";
 //Import User Pages
 import UserHomePage from "./pages/UserPages/UserHomePage";
 import UserProfilePage from "./pages/UserPages/UserProfilePage";
+import UserFeedback from "./pages/UserUI/UserFeedback";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
       <Route path="/routing" element={<Routing />} />
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/farecalculator" element={<FareCalculator />} />
+      <Route path="/UserFeedback" element={<UserFeedback />} />
     </Routes>
   );
 }

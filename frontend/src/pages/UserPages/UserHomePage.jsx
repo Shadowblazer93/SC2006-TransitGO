@@ -69,7 +69,7 @@ function UserHomePage() {
       icon: feedbackIcon,
       header: "Feedback",
       desc: "Track past submission or share new feedback",
-      route: "/Feedback",
+      route: "/UserFeedback",
     },
   ];
 
