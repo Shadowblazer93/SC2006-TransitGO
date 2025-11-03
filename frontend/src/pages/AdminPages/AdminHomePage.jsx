@@ -1,6 +1,8 @@
 //Import components
 import Homepage_Button from "../../components/Homepage_Button";
 import Top_Bar from "../../components/Top_Bar";
+import { user_loggedin, user_isadmin } from "../../supabaseClient";
+import { useState } from "react";
 
 //Import image assets
 import feedbackIcon from "../../assets/Admin/feedback.png";
@@ -11,6 +13,12 @@ import annoucementIcon from "../../assets/Admin/annoucements.png";
 import adminProfile from "../../assets/Admin/adminProfile.png";
 
 function AdminHomePage() {
+  // authentication
+    const [perms, setPerms] = useState(true)
+    user_loggedin().then((res) => {if (!res) setPerms(false)})
+    user_isadmin().then((res) => {if (!res) setPerms(false)})
+    if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
+
   const features = [
     {
       icon: feedbackIcon,

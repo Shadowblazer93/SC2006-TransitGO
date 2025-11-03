@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "../../supabaseClient";
+import { supabase, user_loggedin, user_isadmin } from "../../supabaseClient";
 
 //Import Components
 import Top_Bar_Return from "../../components/Top_Bar_Return";
@@ -111,6 +111,13 @@ function AdminProfilePage() {
   const handleActionClick = (route) => {
     navigate(route);
   };
+
+    // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  user_isadmin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
+  
   return (
     <div>
       <Top_Bar_Return

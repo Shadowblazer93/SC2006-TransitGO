@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { user_loggedin } from "../supabaseClient";
 
 export default function FareCalculator() {
   const [originQuery, setOriginQuery] = useState("");
@@ -153,6 +154,11 @@ export default function FareCalculator() {
       return <div style={{ fontSize: 18 }}>Fare available (details hidden)</div>;
     }
   };
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   return (
     <div style={{ padding: 12, maxWidth: 920 }}>

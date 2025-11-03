@@ -46,15 +46,17 @@ function App() {
       {/* Main App Pages */}
       <Route path="/UserHomePage" element={<UserHomePage />} />
       <Route path="/UserProfile" element={<UserProfilePage />} />
-      <Route path="/users" element={<UserComponent />} />
       <Route path="/stationdensityrealtime" element={<StationDensityRealTime />} />
-      <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
       <Route path="/trainservicealerts" element={<TrainServiceAlerts />} />
       <Route path="/announcements" element={<Announcements />} />
       <Route path="/routing" element={<Routing />} />
       <Route path="/favourites" element={<Favourites />} />
       <Route path="/farecalculator" element={<FareCalculator />} />
       <Route path="/UserFeedback" element={<UserFeedback />} />
+
+      {/* not in use */}
+      <Route path="/users" element={<UserComponent />} />
+      <Route path="/stationdensityforecast" element={<StationDensityForecast />} />
     </Routes>
   );
 }

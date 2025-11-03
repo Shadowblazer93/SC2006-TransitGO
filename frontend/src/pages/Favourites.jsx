@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient";
+import { supabase, user_loggedin } from "../supabaseClient";
 
 export default function Favourites() {
   const [favorites, setFavorites] = useState([]);
@@ -52,6 +52,11 @@ export default function Favourites() {
 
     load();
   }, []);
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   const removeFavorite = async (index) => {
     if (index == null) return;

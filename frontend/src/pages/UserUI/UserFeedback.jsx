@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // Adjust this import if your supabase client is in a different path
-import { supabase } from "../../supabaseClient";
+import { supabase, user_loggedin } from "../../supabaseClient";
 
 export default function UserFeedback() {
   const [title, setTitle] = useState("");
@@ -73,6 +73,11 @@ export default function UserFeedback() {
       setSubmitting(false);
     }
   };
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   return (
     <div className="max-w-2xl mx-auto p-4">

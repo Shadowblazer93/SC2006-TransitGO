@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { supabase } from "../supabaseClient";
+import { supabase, user_loggedin } from "../supabaseClient";
 
 export default function Routing() {
     const mapRef = useRef(null);
@@ -657,6 +657,11 @@ export default function Routing() {
             setSelectMode("none");
         }
     };
+
+    // authentication
+    const [perms, setPerms] = useState(true)
+    user_loggedin().then((res) => {if (!res) setPerms(false)})
+    if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
     return (
         <>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { trainServiceAlerts } from '../services/api'
+import { user_loggedin } from '../supabaseClient'
 
 export default function TrainServiceAlerts() {
   const [alerts, setAlerts] = useState([])
@@ -66,6 +67,11 @@ export default function TrainServiceAlerts() {
       mounted = false
     }
   }, [])
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   const statusMap = (s) => {
     switch (s) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../supabaseClient'
+import { supabase, user_loggedin } from '../../supabaseClient'
 
 export default function AnnouncementView() {
   const [announcements, setAnnouncements] = useState([])
@@ -31,6 +31,11 @@ export default function AnnouncementView() {
       mounted = false
     }
   }, [])
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   const fmtTime = (t) => {
     if (!t) return 'Unknown'
@@ -68,7 +73,6 @@ export default function AnnouncementView() {
     <div style={{
       width: '100vw',
       padding: 12,
-      paddingTop: 72,
       fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial',
       boxSizing: 'border-box',
       display: 'flex',
@@ -79,17 +83,18 @@ export default function AnnouncementView() {
     }}>
       <div
         style={{
-          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
-          height: 54,
+          height: 64,
+          marginBottom: 10,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           padding: '12px',
-          background: '#ddd',
-          borderBottom: '2px solid #aaa',
+          background: '#eee',
+          borderBottom: '3px solid #ddd',
+          borderRadius: 20,
           zIndex: 999,
           boxSizing: 'border-box'
         }}
