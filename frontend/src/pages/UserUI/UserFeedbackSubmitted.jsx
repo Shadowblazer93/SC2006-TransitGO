@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../supabaseClient";
+import { supabase, user_loggedin } from "../../supabaseClient";
 import FooterNav from "../../components/FooterNav";
 
 export default function UserFeedbackSubmitted() {
@@ -7,6 +7,11 @@ export default function UserFeedbackSubmitted() {
   const [repliesMap, setRepliesMap] = useState({}); // { [feedback_id]: [reply,...] }
   const [phase, setPhase] = useState("idle"); // idle | loading | ready | error
   const [error, setError] = useState(null);
+
+  // authentication
+  const [perms, setPerms] = useState(true)
+  user_loggedin().then((res) => {if (!res) setPerms(false)})
+  if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   async function load() {
     setPhase("loading");
