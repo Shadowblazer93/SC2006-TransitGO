@@ -1,5 +1,5 @@
 //Import components
-import { user_loggedin } from "../../supabaseClient";
+import { user_loggedin, user_isadmin } from "../../supabaseClient";
 import { useState } from "react";
 import Homepage_Button from "../../components/Homepage_Button";
 import Top_Bar from "../../components/Top_Bar";
@@ -21,7 +21,9 @@ import userProfile from "../../assets/User/userProfile.png";
 function UserHomePage() {
   // authentication
   const [perms, setPerms] = useState(true)
+  const [admin, setAdmin] = useState(false)
   user_loggedin().then((res) => {if (!res) setPerms(false)})
+  user_isadmin().then((res) => {if (res) setAdmin(true)})
   if (!perms) {return (<div style={{background:'#ffaeaeff', fontWeight:600, fontSize:15, padding: '20px 5px'}}>YOU DO NOT HAVE PERMISSION TO VIEW THIS PAGE</div>)}
 
   const features = [
@@ -103,6 +105,14 @@ function UserHomePage() {
           route={feature.route}
         />
       ))}
+      {admin && (
+        <Homepage_Button
+          icon={mapIcon}
+          header="Admin Home Page"
+          desc="Back to Admin Home Page."
+          route="/AdminHomePage"
+        />
+      )}
       <FooterNav />
     </div>
   );
