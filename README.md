@@ -79,7 +79,7 @@ my-mobile-app
    ```
 3. Start the React application:
    ```
-   npm start
+   npm run dev
    ```
 
 ## API Documentation
